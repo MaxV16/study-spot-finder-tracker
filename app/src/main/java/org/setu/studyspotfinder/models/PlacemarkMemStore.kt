@@ -1,4 +1,4 @@
-package org.setu.placemark.models
+package org.setu.studyspotfinder.models
 
 import java.util.concurrent.atomic.AtomicLong
 

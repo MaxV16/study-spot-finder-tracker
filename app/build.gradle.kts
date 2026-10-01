@@ -3,13 +3,13 @@ plugins {
 }
 
 android {
-    namespace = "org.setu.placemark"
+    namespace = "org.setu.studyspotfinder"
     compileSdk {
         version = release(37)
     }
 
     defaultConfig {
-        applicationId = "org.setu.placemark"
+        applicationId = "org.setu.studyspotfinder"
         minSdk = 24
         targetSdk = 37
         versionCode = 1

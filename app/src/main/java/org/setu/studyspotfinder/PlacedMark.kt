@@ -1,4 +1,4 @@
-package org.setu.placemark
+package org.setu.studyspotfinder
 
 data class PlacedMark(
     var id: Long = 0L,

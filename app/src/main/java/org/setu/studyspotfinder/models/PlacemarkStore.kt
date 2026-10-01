@@ -1,4 +1,4 @@
-package org.setu.placemark.models
+package org.setu.studyspotfinder.models
 
 interface PlacemarkStore {
     fun findAll(): List<PlacemarkModel>

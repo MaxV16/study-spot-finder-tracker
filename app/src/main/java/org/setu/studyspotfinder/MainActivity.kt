@@ -1,4 +1,4 @@
-package org.setu.placemark
+package org.setu.studyspotfinder
 
 import android.content.Intent
 import android.os.Bundle

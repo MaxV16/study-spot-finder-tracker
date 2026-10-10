@@ -130,7 +130,7 @@ class AddEditActivity : AppCompatActivity() {
 
         if (editingId == null || editingId == -1L) {
 
-            val mark = PlacedMark(
+            val mark = StudySpot(
                 title = title,
                 desc = description,
                 x = x,
@@ -147,7 +147,7 @@ class AddEditActivity : AppCompatActivity() {
 
         } else {
 
-            val mark = PlacedMark(
+            val mark = StudySpot(
                 id = editingId!!,
                 title = title,
                 desc = description,

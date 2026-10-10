@@ -1,6 +1,6 @@
 package org.setu.studyspotfinder
 
-data class PlacedMark(
+data class StudySpot(
     var id: Long = 0L,
     var title: String = "",
     var desc: String = "",

@@ -85,7 +85,7 @@ class AddEditActivity : AppCompatActivity() {
 
     private fun loadExistingMark(id: Long) {
 
-        val mark = AppData.placedMarks.findOne(id)
+        val mark = AppData.studySpots.findOne(id)
 
         if (mark == null) {
             Toast.makeText(
@@ -130,14 +130,14 @@ class AddEditActivity : AppCompatActivity() {
 
         if (editingId == null || editingId == -1L) {
 
-            val mark = PlacedMark(
+            val mark = StudySpot(
                 title = title,
                 desc = description,
                 x = x,
                 y = y
             )
 
-            AppData.placedMarks.create(mark)
+            AppData.studySpots.create(mark)
 
             Toast.makeText(
                 this,
@@ -147,7 +147,7 @@ class AddEditActivity : AppCompatActivity() {
 
         } else {
 
-            val mark = PlacedMark(
+            val mark = StudySpot(
                 id = editingId!!,
                 title = title,
                 desc = description,
@@ -155,7 +155,7 @@ class AddEditActivity : AppCompatActivity() {
                 y = y
             )
 
-            AppData.placedMarks.update(mark)
+            AppData.studySpots.update(mark)
 
             Toast.makeText(
                 this,

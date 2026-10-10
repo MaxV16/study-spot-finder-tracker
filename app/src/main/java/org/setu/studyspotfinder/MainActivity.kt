@@ -7,10 +7,14 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import android.text.Editable
+import android.text.TextWatcher
+import android.widget.EditText
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var listLayout: LinearLayout
+    private lateinit var searchBox: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,12 +51,34 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        // the search box up top, when you type in it the list filters itself
+        searchBox = EditText(this).apply {
+            hint = "Search spots..."
+            setSingleLine()
+
+            addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+                override fun afterTextChanged(s: Editable?) {
+                    displayMarks()
+                }
+            })
+        }
+
         listLayout = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
         }
 
         root.addView(
             title,
+            LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+        )
+
+        root.addView(
+            searchBox,
             LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
@@ -84,8 +110,11 @@ class MainActivity : AppCompatActivity() {
 
         listLayout.removeAllViews()
 
-        val marks = AppData.studySpots.findAll()
+        val query = searchBox.text.toString()
 
+        val marks = AppData.studySpots.findAll().filter {
+            it.title.contains(query, ignoreCase = true)
+        }
         if (marks.isEmpty()) {
 
             val emptyText = TextView(this).apply {

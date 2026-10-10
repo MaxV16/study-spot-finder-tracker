@@ -84,12 +84,12 @@ class MainActivity : AppCompatActivity() {
 
         listLayout.removeAllViews()
 
-        val marks = AppData.placedMarks.findAll()
+        val marks = AppData.studySpots.findAll()
 
         if (marks.isEmpty()) {
 
             val emptyText = TextView(this).apply {
-                text = "No placed marks yet."
+                text = "No placed spots yet."
                 textSize = 18f
                 setPadding(0, 40, 0, 40)
             }
@@ -140,7 +140,7 @@ class MainActivity : AppCompatActivity() {
                 text = "Delete"
 
                 setOnClickListener {
-                    AppData.placedMarks.delete(mark.id)
+                    AppData.studySpots.delete(mark.id)
                     displayMarks()
                 }
             }

@@ -2,7 +2,6 @@ package org.setu.studyspotfinder
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.Gravity
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -10,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
-
+import com.google.android.material.appbar.MaterialToolbar
 class MainActivity : AppCompatActivity() {
 
     private lateinit var listLayout: LinearLayout
@@ -37,10 +36,8 @@ class MainActivity : AppCompatActivity() {
             setPadding(32, 32, 32, 32)
         }
 
-        val title = TextView(this).apply {
-            text = "Placed Marks"
-            textSize = 28f
-            gravity = Gravity.CENTER
+        val toolbar = MaterialToolbar(this).apply {
+            title = "Study Spots"
         }
 
         val addButton = Button(this).apply {
@@ -70,7 +67,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         root.addView(
-            title,
+            toolbar,
             LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
@@ -102,7 +99,7 @@ class MainActivity : AppCompatActivity() {
         )
 
         setContentView(root)
-
+        setSupportActionBar(toolbar)
         displayMarks()
     }
 

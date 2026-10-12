@@ -50,12 +50,17 @@ class StudySpotStore(context: Context) {
         return true
     }
 
-    // remove a mark by its id
+    // removes a mark by its id
     fun delete(id: Long): Boolean {
         val list = findAll().toMutableList()
         val removed = list.removeAll { it.id == id }
         if (removed) save(list)
         return removed
+    }
+
+    // wipes every mark out, used by the delete all menu option
+    fun deleteAll() {
+        save(emptyList())
     }
 
     // find one mark by its id

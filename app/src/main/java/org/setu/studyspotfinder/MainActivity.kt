@@ -15,13 +15,17 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import android.app.AlertDialog
+import android.view.Menu
+import android.view.MenuItem
+
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var searchBox: EditText
     private lateinit var recyclerView: RecyclerView
     private lateinit var emptyText: TextView
-
+    private var sortAZ = false
     private lateinit var spotAdapter: StudySpotAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -143,13 +147,53 @@ class MainActivity : AppCompatActivity() {
         displayMarks()
     }
 
+
+    // build the little three dot menu in the toolbar
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    // //android calls this when you tap a menu item, so we check which one it was and run the matching code.
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_add -> {
+                startActivity(Intent(this, AddEditActivity::class.java))
+                true
+            }
+            R.id.action_sort -> {
+                sortAZ = !sortAZ
+                displayMarks()
+                true
+            }
+            R.id.action_delete_all -> {
+                deleteAllSpots()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    // asks first so you cant nuke everything by accident, been there done that. rip 1st year assignments :/
+    private fun deleteAllSpots() {
+        AlertDialog.Builder(this)
+            .setTitle("Delete all spots?")
+            .setMessage("This removes every study spot and cant be undone.")
+            .setPositiveButton("Delete") { _, _ ->
+                AppData.studySpots.deleteAll()
+                displayMarks()
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
     private fun displayMarks() {
 
         val query = searchBox.text.toString()
 
-        val marks = AppData.studySpots.findAll().filter {
-            it.title.contains(query, ignoreCase = true)
-        }
+        val marks = AppData.studySpots.findAll()
+            .filter { it.title.contains(query, ignoreCase = true) }
+            .let { if (sortAZ) it.sortedBy { spot -> spot.title.lowercase() } else it }
 
         emptyText.visibility = if (marks.isEmpty()) View.VISIBLE else View.GONE
         recyclerView.visibility = if (marks.isEmpty()) View.GONE else View.VISIBLE

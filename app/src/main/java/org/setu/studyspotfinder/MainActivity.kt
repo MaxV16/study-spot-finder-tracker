@@ -2,7 +2,6 @@ package org.setu.studyspotfinder
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.Gravity
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -10,6 +9,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
+import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,10 +40,8 @@ class MainActivity : AppCompatActivity() {
             setPadding(32, 32, 32, 32)
         }
 
-        val title = TextView(this).apply {
-            text = "Placed Marks"
-            textSize = 28f
-            gravity = Gravity.CENTER
+        val toolbar = MaterialToolbar(this).apply {
+            title = "Study Spots"
         }
 
         val addButton = Button(this).apply {
@@ -52,8 +53,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         // the search box up top, when you type in it the list filters itself
-        searchBox = EditText(this).apply {
-            hint = "Search spots..."
+        searchBox = TextInputEditText(this).apply {
             setSingleLine()
 
             addTextChangedListener(object : TextWatcher {
@@ -65,12 +65,17 @@ class MainActivity : AppCompatActivity() {
             })
         }
 
+        val searchLayout = TextInputLayout(this).apply {
+            hint = "Search spots"
+            addView(searchBox)
+        }
+
         listLayout = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
         }
 
         root.addView(
-            title,
+            toolbar,
             LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
@@ -78,7 +83,7 @@ class MainActivity : AppCompatActivity() {
         )
 
         root.addView(
-            searchBox,
+            searchLayout,
             LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
@@ -102,7 +107,7 @@ class MainActivity : AppCompatActivity() {
         )
 
         setContentView(root)
-
+        setSupportActionBar(toolbar)
         displayMarks()
     }
 

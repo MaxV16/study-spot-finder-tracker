@@ -6,6 +6,10 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 
 class AddEditActivity : AppCompatActivity() {
 
@@ -13,6 +17,13 @@ class AddEditActivity : AppCompatActivity() {
     private lateinit var descriptionInput: EditText
     private lateinit var xInput: EditText
     private lateinit var yInput: EditText
+
+    private lateinit var titleLayout: TextInputLayout
+    private lateinit var descriptionLayout: TextInputLayout
+
+    private lateinit var xLayout: TextInputLayout
+
+    private lateinit var yLayout: TextInputLayout
 
     private var editingId: Long? = null
 
@@ -26,62 +37,97 @@ class AddEditActivity : AppCompatActivity() {
         if (editingId != -1L) {
             loadExistingMark(editingId!!)
         }
+
+        supportActionBar?.title = if (editingId == -1L) "Add Spot" else "Edit Spot"
+
+    }
+
+
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return true
     }
 
     private fun createUserInterface() {
 
-        val root = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            setPadding(32, 32, 32, 32)
-        }
-
-        titleInput = EditText(this).apply {
-            hint = "Title"
-        }
-
-        descriptionInput = EditText(this).apply {
-            hint = "Description"
-        }
-
-        xInput = EditText(this).apply {
-            hint = "X coordinate"
-            inputType =
-                android.text.InputType.TYPE_CLASS_NUMBER or
-                android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL
-        }
-
-        yInput = EditText(this).apply {
-            hint = "Y coordinate"
-            inputType =
-                android.text.InputType.TYPE_CLASS_NUMBER or
-                android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL
-        }
-
-        val saveButton = Button(this).apply {
-            text = "Save"
-
-            setOnClickListener {
-                saveMark()
+            val root = LinearLayout(this).apply {
+                orientation = LinearLayout.VERTICAL
+                setPadding(32, 32, 32, 32)
             }
-        }
 
-        val cancelButton = Button(this).apply {
-            text = "Cancel"
-
-            setOnClickListener {
-                finish()
+            val toolbar = MaterialToolbar(this).apply {
+                title = "Add Spot"
             }
+
+            root.addView(
+                toolbar,
+                LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+            )
+
+            setSupportActionBar(toolbar)
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+            titleInput = TextInputEditText(this)
+            descriptionInput = TextInputEditText(this)
+
+            xInput = TextInputEditText(this).apply {
+                inputType =
+                    android.text.InputType.TYPE_CLASS_NUMBER or
+                            android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL
+            }
+
+            yInput = TextInputEditText(this).apply {
+                inputType =
+                    android.text.InputType.TYPE_CLASS_NUMBER or
+                            android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL
+            }
+
+            titleLayout = TextInputLayout(this).apply {
+                hint = "Title"
+                addView(titleInput)
+            }
+
+            descriptionLayout = TextInputLayout(this).apply {
+                hint = "Description"
+                addView(descriptionInput)
+            }
+
+            xLayout = TextInputLayout(this).apply {
+                hint = "X coordinate"
+                addView(xInput)
+            }
+
+            yLayout = TextInputLayout(this).apply {
+                hint = "Y coordinate"
+                addView(yInput)
+            }
+
+            val saveButton = MaterialButton(this).apply {
+                text = "Save"
+                setOnClickListener {
+                    saveMark()
+                }
+            }
+
+            val cancelButton = MaterialButton(this).apply {
+                text = "Cancel"
+                setOnClickListener {
+                    finish()
+                }
+            }
+
+            root.addView(titleLayout)
+            root.addView(descriptionLayout)
+            root.addView(xLayout)
+            root.addView(yLayout)
+            root.addView(saveButton)
+            root.addView(cancelButton)
+
+            setContentView(root)
         }
-
-        root.addView(titleInput)
-        root.addView(descriptionInput)
-        root.addView(xInput)
-        root.addView(yInput)
-        root.addView(saveButton)
-        root.addView(cancelButton)
-
-        setContentView(root)
-    }
 
     private fun loadExistingMark(id: Long) {
 
@@ -110,21 +156,21 @@ class AddEditActivity : AppCompatActivity() {
         val description = descriptionInput.text.toString().trim()
 
         if (title.isEmpty()) {
-            titleInput.error = "Title is required"
+            titleLayout.error = "Title is required"
             return
         }
 
         val x = xInput.text.toString().toDoubleOrNull()
 
         if (x == null) {
-            xInput.error = "Enter a valid number"
+            xLayout.error = "Enter a valid number"
             return
         }
 
         val y = yInput.text.toString().toDoubleOrNull()
 
         if (y == null) {
-            yInput.error = "Enter a valid number"
+            yLayout.error = "Enter a valid number"
             return
         }
 

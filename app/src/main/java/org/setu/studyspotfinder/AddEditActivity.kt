@@ -6,6 +6,7 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.appbar.MaterialToolbar
 
 class AddEditActivity : AppCompatActivity() {
 
@@ -26,6 +27,15 @@ class AddEditActivity : AppCompatActivity() {
         if (editingId != -1L) {
             loadExistingMark(editingId!!)
         }
+
+        supportActionBar?.title = if (editingId == -1L) "Add Spot" else "Edit Spot"
+
+    }
+
+
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return true
     }
 
     private fun createUserInterface() {
@@ -34,6 +44,21 @@ class AddEditActivity : AppCompatActivity() {
             orientation = LinearLayout.VERTICAL
             setPadding(32, 32, 32, 32)
         }
+
+        val toolbar = MaterialToolbar(this).apply {
+            title = "Add Spot"
+        }
+
+        root.addView(
+            toolbar,
+            LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+        )
+
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         titleInput = EditText(this).apply {
             hint = "Title"

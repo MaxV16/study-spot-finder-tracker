@@ -10,6 +10,10 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var listLayout: LinearLayout
@@ -49,8 +53,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         // the search box up top, when you type in it the list filters itself
-        searchBox = EditText(this).apply {
-            hint = "Search spots..."
+        searchBox = TextInputEditText(this).apply {
             setSingleLine()
 
             addTextChangedListener(object : TextWatcher {
@@ -60,6 +63,11 @@ class MainActivity : AppCompatActivity() {
                     displayMarks()
                 }
             })
+        }
+
+        val searchLayout = TextInputLayout(this).apply {
+            hint = "Search spots"
+            addView(searchBox)
         }
 
         listLayout = LinearLayout(this).apply {
@@ -75,7 +83,7 @@ class MainActivity : AppCompatActivity() {
         )
 
         root.addView(
-            searchBox,
+            searchLayout,
             LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT

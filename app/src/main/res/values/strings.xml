@@ -1,3 +1,32 @@
+
 <resources>
-    <string name="app_name"> Study Spot Finder &amp; Tracker</string>
+    <string name="app_name">Study Spot Finder &amp; Tracker</string>
+    <string name="main_title">Study Spots</string>
+    <string name="add_spot">Add Spot</string>
+    <string name="search_hint">Search spots</string>
+    <string name="empty_list">No placed spots yet.</string>
+    <string name="title_hint">Title</string>
+    <string name="description_hint">Description</string>
+    <string name="x_hint">X coordinate</string>
+    <string name="y_hint">Y coordinate</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="edit_spot">Edit Spot</string>
+
+    <string name="err_title_required">Title is required</string>
+    <string name="err_valid_number">Enter a valid number</string>
+    <string name="mark_not_found">Mark not found</string>
+    <string name="mark_created">Mark created</string>
+    <string name="mark_updated">Mark updated</string>
+
+    <string name="delete_all_title">Delete all spots?</string>
+    <string name="delete_all_message">This removes every study spot and cant be undone.</string>
+
+    <string name="menu_add">Add Spot</string>
+    <string name="menu_sort">Sort A-Z</string>
+    <string name="menu_delete_all">Delete all</string>
+    <string name="title_format">%1$d: %2$s</string>
+    <string name="coords_format">X: %1$s, Y: %2$s</string>
 </resources>

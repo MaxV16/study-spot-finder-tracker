@@ -13,7 +13,7 @@ class StudySpotAdapter(
     private val onDelete: (StudySpot) -> Unit
 ) : RecyclerView.Adapter<StudySpotAdapter.SpotViewHolder>() {
 
-    // holds the views for one row so we dont findViewById every time
+    //holds the views for one row so we dont findViewById every time
     class SpotViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val title: TextView = view.findViewById(R.id.spotTitle)
         val desc: TextView = view.findViewById(R.id.spotDesc)
@@ -30,10 +30,11 @@ class StudySpotAdapter(
 
     override fun onBindViewHolder(holder: SpotViewHolder, position: Int) {
         val spot = spots[position]
+        val context = holder.itemView.context
 
-        holder.title.text = "${spot.id}: ${spot.title}"
+        holder.title.text = context.getString(R.string.title_format, spot.id, spot.title)
         holder.desc.text = spot.desc
-        holder.coords.text = "X: ${spot.x}, Y: ${spot.y}"
+        holder.coords.text = context.getString(R.string.coords_format, spot.x.toString(), spot.y.toString())
 
         holder.editButton.setOnClickListener { onEdit(spot) }
         holder.deleteButton.setOnClickListener { onDelete(spot) }
@@ -41,7 +42,7 @@ class StudySpotAdapter(
 
     override fun getItemCount(): Int = spots.size
 
-    // swap the whole list and let the recyclerview animate the change
+    // swaps le whole list and let the recyclerview animate the change
     fun updateSpots(newSpots: List<StudySpot>) {
         spots = newSpots
         notifyDataSetChanged()

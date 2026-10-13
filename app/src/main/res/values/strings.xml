@@ -17,9 +17,9 @@
 
     <string name="err_title_required">Title is required</string>
     <string name="err_valid_number">Enter a valid number</string>
-    <string name="mark_not_found">Mark not found</string>
-    <string name="mark_created">Mark created</string>
-    <string name="mark_updated">Mark updated</string>
+    <string name="spot_not_found">Spot not found</string>
+    <string name="spot_created">Spot created</string>
+    <string name="spot_updated">Spot updated</string>
 
     <string name="delete_all_title">Delete all spots?</string>
     <string name="delete_all_message">This removes every study spot and cant be undone.</string>

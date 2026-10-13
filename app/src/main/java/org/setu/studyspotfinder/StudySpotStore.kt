@@ -10,9 +10,9 @@ import org.json.JSONObject
 class StudySpotStore(context: Context) {
 
     // this is the file we save everything to, its in the apps private storage
-    private val file = java.io.File(context.filesDir, "marks.json")
+    private val file = java.io.File(context.filesDir, "spots.json")
 
-    // read the file and turn it back into a list of marks
+    // read the file and turn it back into a list of spots
     fun findAll(): List<StudySpot> {
         if (!file.exists()) return emptyList()
         val arr = JSONArray(file.readText())
@@ -32,25 +32,25 @@ class StudySpotStore(context: Context) {
         return list
     }
 
-    // add a new mark, we give it the next free id ourselfs
-    fun create(mark: StudySpot) {
+    // add a new spots, we give it the next free id ourselfs
+    fun create(spot: StudySpot) {
         val list = findAll().toMutableList()
-        mark.id = (list.maxOfOrNull { it.id } ?: 0L) + 1
-        list.add(mark)
+        spot.id = (list.maxOfOrNull { it.id } ?: 0L) + 1
+        list.add(spot)
         save(list)
     }
 
-    // update a mark thats allready saved
-    fun update(mark: StudySpot): Boolean {
+    // update a spot thats allready saved
+    fun update(spot: StudySpot): Boolean {
         val list = findAll().toMutableList()
-        val index = list.indexOfFirst { it.id == mark.id }
+        val index = list.indexOfFirst { it.id == spot.id }
         if (index == -1) return false
-        list[index] = mark
+        list[index] = spot
         save(list)
         return true
     }
 
-    // removes a mark by its id
+    // removes a spot by its id
     fun delete(id: Long): Boolean {
         val list = findAll().toMutableList()
         val removed = list.removeAll { it.id == id }
@@ -58,12 +58,12 @@ class StudySpotStore(context: Context) {
         return removed
     }
 
-    // wipes every mark out, used by the delete all menu option
+    // wipes every spot out, used by the delete all menu option
     fun deleteAll() {
         save(emptyList())
     }
 
-    // find one mark by its id
+    // find one spot by its id
     fun findOne(id: Long): StudySpot? {
         return findAll().find { it.id == id }
     }
@@ -71,13 +71,13 @@ class StudySpotStore(context: Context) {
     // turn the whole list into json and write it to the file
     private fun save(list: List<StudySpot>) {
         val arr = JSONArray()
-        for (mark in list) {
+        for (spot in list) {
             val obj = JSONObject()
-            obj.put("id", mark.id)
-            obj.put("title", mark.title)
-            obj.put("desc", mark.desc)
-            obj.put("x", mark.x)
-            obj.put("y", mark.y)
+            obj.put("id", spot.id)
+            obj.put("title", spot.title)
+            obj.put("desc", spot.desc)
+            obj.put("x", spot.x)
+            obj.put("y", spot.y)
             arr.put(obj)
         }
         file.writeText(arr.toString())

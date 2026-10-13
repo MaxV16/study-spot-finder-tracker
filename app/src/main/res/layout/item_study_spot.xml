@@ -4,53 +4,57 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="4dp">
+    android:layout_margin="@dimen/card_margin"
+    app:cardBackgroundColor="@color/spot_surface"
+    app:cardCornerRadius="@dimen/card_radius"
+    app:cardElevation="@dimen/card_elevation">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="@dimen/card_padding">
 
         <TextView
             android:id="@+id/spotTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:textColor="@color/spot_text"
+            android:textSize="@dimen/title_size"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/spotDesc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp" />
+            android:textColor="@color/spot_text_soft"
+            android:textSize="@dimen/desc_size" />
 
         <TextView
             android:id="@+id/spotCoords"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14sp" />
+            android:textColor="@color/spot_text_soft"
+            android:textSize="@dimen/coords_size" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/gap_small"
             android:orientation="horizontal">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/editButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Edit" />
+                android:text="@string/edit" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/deleteButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="Delete" />
+                android:layout_marginStart="@dimen/gap_small"
+                android:text="@string/delete" />
 
         </LinearLayout>
     </LinearLayout>

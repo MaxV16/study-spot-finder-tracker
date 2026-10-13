@@ -1,5 +1,6 @@
 package org.setu.studyspotfinder
 
+import android.R.attr.hint
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -38,8 +39,8 @@ class AddEditActivity : AppCompatActivity() {
             loadExistingMark(editingId!!)
         }
 
-        supportActionBar?.title = if (editingId == -1L) "Add Spot" else "Edit Spot"
-
+        supportActionBar?.title =
+            if (editingId == -1L) getString(R.string.add_spot) else getString(R.string.edit_spot)
     }
 
 
@@ -50,14 +51,18 @@ class AddEditActivity : AppCompatActivity() {
 
     private fun createUserInterface() {
 
-            val root = LinearLayout(this).apply {
-                orientation = LinearLayout.VERTICAL
-                setPadding(32, 32, 32, 32)
-            }
+        val pad = resources.getDimensionPixelSize(R.dimen.screen_padding)
 
-            val toolbar = MaterialToolbar(this).apply {
-                title = "Add Spot"
-            }
+        val root = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(pad, pad, pad, pad)
+        }
+
+        val toolbar = MaterialToolbar(this).apply {
+            title = getString(R.string.add_spot)
+            setBackgroundColor(context.getColor(R.color.spot_primary))
+            setTitleTextColor(context.getColor(R.color.white))
+        }
 
             root.addView(
                 toolbar,
@@ -84,36 +89,34 @@ class AddEditActivity : AppCompatActivity() {
                     android.text.InputType.TYPE_CLASS_NUMBER or
                             android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL
             }
+        titleLayout = TextInputLayout(this).apply {
+            hint = getString(R.string.title_hint)
+            addView(titleInput)
+        }
 
-            titleLayout = TextInputLayout(this).apply {
-                hint = "Title"
-                addView(titleInput)
-            }
+        descriptionLayout = TextInputLayout(this).apply {
+            hint = getString(R.string.description_hint)
+            addView(descriptionInput)
+        }
 
-            descriptionLayout = TextInputLayout(this).apply {
-                hint = "Description"
-                addView(descriptionInput)
-            }
+        xLayout = TextInputLayout(this).apply {
+            hint = getString(R.string.x_hint)
+            addView(xInput)
+        }
 
-            xLayout = TextInputLayout(this).apply {
-                hint = "X coordinate"
-                addView(xInput)
-            }
-
-            yLayout = TextInputLayout(this).apply {
-                hint = "Y coordinate"
-                addView(yInput)
-            }
-
+        yLayout = TextInputLayout(this).apply {
+            hint = getString(R.string.y_hint)
+            addView(yInput)
+        }
             val saveButton = MaterialButton(this).apply {
-                text = "Save"
+                text = getString(R.string.save)
                 setOnClickListener {
                     saveMark()
                 }
             }
 
             val cancelButton = MaterialButton(this).apply {
-                text = "Cancel"
+                text = getString(R.string.cancel)
                 setOnClickListener {
                     finish()
                 }
@@ -136,7 +139,7 @@ class AddEditActivity : AppCompatActivity() {
         if (mark == null) {
             Toast.makeText(
                 this,
-                "Mark not found",
+                getString(R.string.mark_not_found),
                 Toast.LENGTH_SHORT
             ).show()
 
@@ -156,21 +159,21 @@ class AddEditActivity : AppCompatActivity() {
         val description = descriptionInput.text.toString().trim()
 
         if (title.isEmpty()) {
-            titleLayout.error = "Title is required"
+            titleLayout.error = getString(R.string.err_title_required)
             return
         }
 
         val x = xInput.text.toString().toDoubleOrNull()
 
         if (x == null) {
-            xLayout.error = "Enter a valid number"
+            getString(R.string.err_valid_number)
             return
         }
 
         val y = yInput.text.toString().toDoubleOrNull()
 
         if (y == null) {
-            yLayout.error = "Enter a valid number"
+            getString(R.string.err_valid_number)
             return
         }
 
@@ -187,7 +190,7 @@ class AddEditActivity : AppCompatActivity() {
 
             Toast.makeText(
                 this,
-                "Mark created",
+                getString(R.string.mark_created),
                 Toast.LENGTH_SHORT
             ).show()
 
@@ -205,7 +208,7 @@ class AddEditActivity : AppCompatActivity() {
 
             Toast.makeText(
                 this,
-                "Mark updated",
+                getString(R.string.mark_updated),
                 Toast.LENGTH_SHORT
             ).show()
         }

@@ -1,7 +1,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
     <style name="Base.Theme.StudySpotFinder" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorPrimary">@color/spot_primary</item>
+        <item name="colorSecondary">@color/spot_secondary</item>
+        <item name="colorSurface">@color/spot_surface</item>
+        <item name="android:colorBackground">@color/spot_background</item>
+        <item name="android:textColorPrimary">@color/spot_text</item>
     </style>
+
+    <style name="Theme.StudySpotFinder" parent="Base.Theme.StudySpotFinder" />
 </resources>

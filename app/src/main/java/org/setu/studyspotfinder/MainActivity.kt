@@ -44,17 +44,21 @@ class MainActivity : AppCompatActivity() {
 
     private fun createUserInterface() {
 
+        val pad = resources.getDimensionPixelSize(R.dimen.screen_padding)
+
         val root = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(32, 32, 32, 32)
+            setPadding(pad, pad, pad, pad)
         }
 
         val toolbar = MaterialToolbar(this).apply {
-            title = "Study Spots"
+            title = getString(R.string.main_title)
+            setBackgroundColor(context.getColor(R.color.spot_primary))
+            setTitleTextColor(context.getColor(R.color.white))
         }
 
         val addButton = MaterialButton(this).apply {
-            text = "Add Mark"
+            text = getString(R.string.add_spot)
             setOnClickListener {
                 val intent = Intent(this@MainActivity, AddEditActivity::class.java)
                 startActivity(intent)
@@ -75,12 +79,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         val searchLayout = TextInputLayout(this).apply {
-            hint = "Search spots"
+            hint = getString(R.string.search_hint)
             addView(searchBox)
         }
 
         emptyText = TextView(this).apply {
-            text = "No placed spots yet."
+            text = getString(R.string.empty_list)
             textSize = 18f
             setPadding(0, 40, 0, 40)
             visibility = View.GONE

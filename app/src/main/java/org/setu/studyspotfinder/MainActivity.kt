@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
 
         if (::recyclerView.isInitialized) {
-            displayMarks()
+            displaySpots()
         }
     }
 
@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
                 override fun afterTextChanged(s: Editable?) {
-                    displayMarks()
+                    displaySpots()
                 }
             })
         }
@@ -100,7 +100,7 @@ class MainActivity : AppCompatActivity() {
             },
             onDelete = { spot ->
                 AppData.studySpots.delete(spot.id)
-                displayMarks()
+                displaySpots()
             }
         )
 
@@ -148,7 +148,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(root)
         setSupportActionBar(toolbar)
 
-        displayMarks()
+        displaySpots()
     }
 
 
@@ -167,7 +167,7 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.action_sort -> {
                 sortAZ = !sortAZ
-                displayMarks()
+                displaySpots()
                 true
             }
             R.id.action_delete_all -> {
@@ -185,13 +185,13 @@ class MainActivity : AppCompatActivity() {
             .setMessage("This removes every study spot and cant be undone.")
             .setPositiveButton("Delete") { _, _ ->
                 AppData.studySpots.deleteAll()
-                displayMarks()
+                displaySpots()
             }
             .setNegativeButton("Cancel", null)
             .show()
     }
 
-    private fun displayMarks() {
+    private fun displaySpots() {
 
         val query = searchBox.text.toString()
 

@@ -36,7 +36,7 @@ class AddEditActivity : AppCompatActivity() {
         editingId = intent.getLongExtra("id", -1L)
 
         if (editingId != -1L) {
-            loadExistingMark(editingId!!)
+            loadExistingSpot(editingId!!)
         }
 
         supportActionBar?.title =
@@ -111,7 +111,7 @@ class AddEditActivity : AppCompatActivity() {
             val saveButton = MaterialButton(this).apply {
                 text = getString(R.string.save)
                 setOnClickListener {
-                    saveMark()
+                    saveSpot()
                 }
             }
 
@@ -132,14 +132,14 @@ class AddEditActivity : AppCompatActivity() {
             setContentView(root)
         }
 
-    private fun loadExistingMark(id: Long) {
+    private fun loadExistingSpot(id: Long) {
 
-        val mark = AppData.studySpots.findOne(id)
+        val spot = AppData.studySpots.findOne(id)
 
-        if (mark == null) {
+        if (spot == null) {
             Toast.makeText(
                 this,
-                getString(R.string.mark_not_found),
+                getString(R.string.spot_not_found),
                 Toast.LENGTH_SHORT
             ).show()
 
@@ -147,13 +147,13 @@ class AddEditActivity : AppCompatActivity() {
             return
         }
 
-        titleInput.setText(mark.title)
-        descriptionInput.setText(mark.desc)
-        xInput.setText(mark.x.toString())
-        yInput.setText(mark.y.toString())
+        titleInput.setText(spot.title)
+        descriptionInput.setText(spot.desc)
+        xInput.setText(spot.x.toString())
+        yInput.setText(spot.y.toString())
     }
 
-    private fun saveMark() {
+    private fun saveSpot() {
 
         val title = titleInput.text.toString().trim()
         val description = descriptionInput.text.toString().trim()
@@ -179,24 +179,24 @@ class AddEditActivity : AppCompatActivity() {
 
         if (editingId == null || editingId == -1L) {
 
-            val mark = StudySpot(
+            val spot = StudySpot(
                 title = title,
                 desc = description,
                 x = x,
                 y = y
             )
 
-            AppData.studySpots.create(mark)
+            AppData.studySpots.create(spot)
 
             Toast.makeText(
                 this,
-                getString(R.string.mark_created),
+                getString(R.string.spot_created),
                 Toast.LENGTH_SHORT
             ).show()
 
         } else {
 
-            val mark = StudySpot(
+            val spot = StudySpot(
                 id = editingId!!,
                 title = title,
                 desc = description,
@@ -204,11 +204,11 @@ class AddEditActivity : AppCompatActivity() {
                 y = y
             )
 
-            AppData.studySpots.update(mark)
+            AppData.studySpots.update(spot)
 
             Toast.makeText(
                 this,
-                getString(R.string.mark_updated),
+                getString(R.string.spot_updated),
                 Toast.LENGTH_SHORT
             ).show()
         }

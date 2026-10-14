@@ -1,8 +1,8 @@
 package org.setu.studyspotfinder
 
-import android.R.attr.hint
+
+import android.widget.ArrayAdapter
 import android.os.Bundle
-import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -11,6 +11,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.google.android.material.textfield.MaterialAutoCompleteTextView
 
 class AddEditActivity : AppCompatActivity() {
 
@@ -25,7 +26,8 @@ class AddEditActivity : AppCompatActivity() {
     private lateinit var xLayout: TextInputLayout
 
     private lateinit var yLayout: TextInputLayout
-
+    private lateinit var categoryInput: MaterialAutoCompleteTextView
+    private lateinit var categoryLayout: TextInputLayout
     private var editingId: Long? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -108,6 +110,20 @@ class AddEditActivity : AppCompatActivity() {
             hint = getString(R.string.y_hint)
             addView(yInput)
         }
+
+        val categories = resources.getStringArray(R.array.categories)
+
+        categoryInput = MaterialAutoCompleteTextView(this).apply {
+            inputType = android.text.InputType.TYPE_NULL
+            setAdapter(ArrayAdapter(this@AddEditActivity, android.R.layout.simple_list_item_1, categories))
+        }
+
+        categoryLayout = TextInputLayout(this).apply {
+            hint = getString(R.string.category_hint)
+            endIconMode = TextInputLayout.END_ICON_DROPDOWN_MENU
+            addView(categoryInput)
+        }
+
             val saveButton = MaterialButton(this).apply {
                 text = getString(R.string.save)
                 setOnClickListener {
@@ -126,6 +142,7 @@ class AddEditActivity : AppCompatActivity() {
             root.addView(descriptionLayout)
             root.addView(xLayout)
             root.addView(yLayout)
+            root.addView(categoryLayout)
             root.addView(saveButton)
             root.addView(cancelButton)
 
@@ -151,6 +168,7 @@ class AddEditActivity : AppCompatActivity() {
         descriptionInput.setText(spot.desc)
         xInput.setText(spot.x.toString())
         yInput.setText(spot.y.toString())
+        categoryInput.setText(spot.category, false)
     }
 
     private fun saveSpot() {
@@ -166,16 +184,18 @@ class AddEditActivity : AppCompatActivity() {
         val x = xInput.text.toString().toDoubleOrNull()
 
         if (x == null) {
-            getString(R.string.err_valid_number)
+            xLayout.error = getString(R.string.err_valid_number)
             return
         }
 
         val y = yInput.text.toString().toDoubleOrNull()
 
         if (y == null) {
-            getString(R.string.err_valid_number)
+            yLayout.error = getString(R.string.err_valid_number)
             return
         }
+
+        val category = categoryInput.text.toString()
 
         if (editingId == null || editingId == -1L) {
 
@@ -183,7 +203,8 @@ class AddEditActivity : AppCompatActivity() {
                 title = title,
                 desc = description,
                 x = x,
-                y = y
+                y = y,
+                category = category
             )
 
             AppData.studySpots.create(spot)
@@ -201,7 +222,8 @@ class AddEditActivity : AppCompatActivity() {
                 title = title,
                 desc = description,
                 x = x,
-                y = y
+                y = y,
+                category = category
             )
 
             AppData.studySpots.update(spot)

@@ -1,0 +1,9 @@
+<resources>
+    <string-array name="categories">
+        <item>Library</item>
+        <item>Cafe</item>
+        <item>Quiet Room</item>
+        <item>Outdoors</item>
+        <item>Other</item>
+    </string-array>
+</resources>

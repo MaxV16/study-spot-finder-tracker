@@ -16,6 +16,8 @@ class StudySpotAdapter(
     //holds the views for one row so we dont findViewById every time
     class SpotViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val title: TextView = view.findViewById(R.id.spotTitle)
+
+        val category: TextView = view.findViewById(R.id.spotCategory)
         val desc: TextView = view.findViewById(R.id.spotDesc)
         val coords: TextView = view.findViewById(R.id.spotCoords)
         val editButton: Button = view.findViewById(R.id.editButton)
@@ -33,6 +35,8 @@ class StudySpotAdapter(
         val context = holder.itemView.context
 
         holder.title.text = context.getString(R.string.title_format, spot.id, spot.title)
+        holder.category.text = spot.category
+        holder.category.visibility = if (spot.category.isEmpty()) View.GONE else View.VISIBLE
         holder.desc.text = spot.desc
         holder.coords.text = context.getString(R.string.coords_format, spot.x.toString(), spot.y.toString())
 

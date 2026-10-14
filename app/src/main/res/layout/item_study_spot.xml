@@ -24,6 +24,16 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/spotCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/gap_small"
+            android:textColor="@color/spot_secondary"
+            android:textSize="@dimen/coords_size"
+            android:textStyle="bold"
+            />
+
+        <TextView
             android:id="@+id/spotDesc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

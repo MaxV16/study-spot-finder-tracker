@@ -25,7 +25,8 @@ class StudySpotStore(context: Context) {
                     title = obj.getString("title"),
                     desc = obj.getString("desc"),
                     x = obj.getDouble("x"),
-                    y = obj.getDouble("y")
+                    y = obj.getDouble("y"),
+                    category = obj.optString("category")
                 )
             )
         }
@@ -78,7 +79,9 @@ class StudySpotStore(context: Context) {
             obj.put("desc", spot.desc)
             obj.put("x", spot.x)
             obj.put("y", spot.y)
+            obj.put("category", spot.category)
             arr.put(obj)
+
         }
         file.writeText(arr.toString())
     }

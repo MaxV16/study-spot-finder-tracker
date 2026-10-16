@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- the layout for one row in the list (one study spot card). the adapter reuses this same file for every spot,
+     just filling in different values each time. note the @+id names, kotlin finds the views with those. -->
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"

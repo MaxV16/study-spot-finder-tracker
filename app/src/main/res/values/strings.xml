@@ -1,4 +1,5 @@
 
+<!-- all the text the app shows. kotlin reaches it with getString(R.string.xxx). the &amp; is how u write an ampersand in xml -->
 <resources>
 
     <string name="app_name">Study Spot Finder &amp; Tracker</string>

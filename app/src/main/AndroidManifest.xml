@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- the manifest tells android what the app has. android:name on application is our StudySpotApp so it loads at startup. -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -13,10 +14,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.StudySpotFinder">
 
+        <!-- the add/edit form, exported=false so only our app can open it -->
         <activity
             android:name=".ui.AddEditActivity"
             android:exported="false" />
 
+        <!-- the home screen, the intent-filter below is what makes it the launcher icon -->
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"

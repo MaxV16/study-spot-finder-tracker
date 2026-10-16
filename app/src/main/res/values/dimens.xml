@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- shared sizes so we arent hardcoding 16dp in ten places. dp = screen independent, sp = text that respects font size -->
 <resources>
     <dimen name="screen_padding">16dp</dimen>
     <dimen name="card_margin">8dp</dimen>

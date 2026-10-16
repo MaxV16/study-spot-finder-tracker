@@ -4,17 +4,17 @@ import android.app.Application
 import org.setu.studyspotfinder.data.AppData
 import org.setu.studyspotfinder.data.StudySpotStore
 
-// this is the application class
-// it runs before any activity and sets up the store
+// the application class is the very first thing android makes when the app starts, before any screen.
+// the manifest points at it with android:name=".StudySpotApp".
+// we build the one store in here so its ready and shared for the whole app :D
 class StudySpotApp : Application() {
 
-    // the store that saves spots to a json file
+    // the one and only store, kept here so AppData can grab it
     lateinit var store: StudySpotStore
 
     override fun onCreate() {
         super.onCreate()
-        store = StudySpotStore(this) //created once at app launch
-        AppData.init(this)
+        store = StudySpotStore(this) // made once at launch, not once per screen
+        AppData.init(this)    // tells AppData about it so the screens can use it
     }
 }
-                     

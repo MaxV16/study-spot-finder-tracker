@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- all the app colours live here so everything stays consistent. tweak the theme from one place. -->
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!-- the colours we picked so everything looks like one app -->
+    <!-- the colours we picked so it looks like one app -->
     <color name="spot_primary">#4E5B9E</color>
     <color name="spot_primary_dark">#37426F</color>
     <color name="spot_secondary">#2E9C8E</color>

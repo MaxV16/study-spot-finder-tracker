@@ -1,4 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- the app theme. Material3 for the nice look, NoActionBar because we draw our own toolbar. the manifest uses this. -->
     <style name="Base.Theme.StudySpotFinder" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/spot_primary</item>
         <item name="colorSecondary">@color/spot_secondary</item>

@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- shared sizes/spacings so we arent hardcoding 16dp in ten different places.
+     dp = a screen independent pixel size, sp = a text size that also respects the users font setting.
+     kotlin reads them with resources.getDimensionPixelSize(R.dimen.xxx). -->
 <resources>
-    <dimen name="screen_padding">16dp</dimen>
-    <dimen name="card_margin">8dp</dimen>
-    <dimen name="card_radius">12dp</dimen>
-    <dimen name="card_elevation">4dp</dimen>
-    <dimen name="card_padding">16dp</dimen>
+    <dimen name="screen_padding">16dp</dimen>   <!-- edge padding for whole screens -->
+    <dimen name="card_margin">8dp</dimen>       <!-- gap around each card -->
+    <dimen name="card_radius">12dp</dimen>      <!-- rounded corners on the cards -->
+    <dimen name="card_elevation">4dp</dimen>    <!-- the drop shadow under each card -->
+    <dimen name="card_padding">16dp</dimen>     <!-- padding inside a card -->
     <dimen name="title_size">20sp</dimen>
     <dimen name="desc_size">16sp</dimen>
     <dimen name="coords_size">14sp</dimen>

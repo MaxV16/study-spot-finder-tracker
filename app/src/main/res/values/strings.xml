@@ -1,4 +1,7 @@
 
+<!-- all the text the app shows lives here instead of being hardcoded in kotlin.
+     that way its easy to change in one place, and kotlin reaches it with getString(R.string.xxx).
+     the &amp; is how you write an ampersand in xml, a plain & would break the build. -->
 <resources>
 
     <string name="app_name">Study Spot Finder &amp; Tracker</string>
@@ -17,18 +20,22 @@
     <string name="edit_spot">Edit Spot</string>
     <string name="category_hint">Category</string>
 
+    <!-- validation and feedback messages -->
     <string name="err_title_required">Title is required</string>
     <string name="err_valid_number">Enter a valid number</string>
     <string name="spot_not_found">Spot not found</string>
     <string name="spot_created">Spot created</string>
     <string name="spot_updated">Spot updated</string>
 
+    <!-- the delete all confirm popup -->
     <string name="delete_all_title">Delete all spots?</string>
     <string name="delete_all_message">This removes every study spot and cant be undone.</string>
 
+    <!-- the options menu items -->
     <string name="menu_add">Add Spot</string>
     <string name="menu_sort">Sort A-Z</string>
     <string name="menu_delete_all">Delete all</string>
+    <!-- %1$d is a whole number (the id) and %2$s is text (the title), filled in by getString(...) at runtime -->
     <string name="title_format">%1$d: %2$s</string>
     <string name="coords_format">X: %1$s, Y: %2$s</string>
 </resources>

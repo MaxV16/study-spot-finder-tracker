@@ -1,5 +1,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- the app theme. Material3 gives us the nice material look.
+         NoActionBar because we draw our own toolbar in the screens.
+         the manifest applies this theme to the whole app. -->
     <style name="Base.Theme.StudySpotFinder" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- wire our own colours into the material theme slots -->
         <item name="colorPrimary">@color/spot_primary</item>
         <item name="colorSecondary">@color/spot_secondary</item>
         <item name="colorSurface">@color/spot_surface</item>
@@ -7,5 +11,6 @@
         <item name="android:textColorPrimary">@color/spot_text</item>
     </style>
 
+    <!-- the actual theme the app points at, it just extends the base above -->
     <style name="Theme.StudySpotFinder" parent="Base.Theme.StudySpotFinder" />
 </resources>

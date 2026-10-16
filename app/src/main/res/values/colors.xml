@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- every colour the app uses. keeping them here means the whole app stays consistent
+     and we can tweak the theme in one spot. kotlin reads them with getColor(R.color.xxx). -->
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
     <!-- the colours we picked so everything looks like one app -->
-    <color name="spot_primary">#4E5B9E</color>
+    <color name="spot_primary">#4E5B9E</color>        <!-- main purple, used on the toolbar -->
     <color name="spot_primary_dark">#37426F</color>
-    <color name="spot_secondary">#2E9C8E</color>
-    <color name="spot_background">#F5F6FC</color>
-    <color name="spot_surface">#FFFFFF</color>
-    <color name="spot_text">#1B1B22</color>
-    <color name="spot_text_soft">#5F6070</color>
+    <color name="spot_secondary">#2E9C8E</color>      <!-- the category label colour -->
+    <color name="spot_background">#F5F6FC</color>     <!-- the screen background -->
+    <color name="spot_surface">#FFFFFF</color>        <!-- the card backgrounds -->
+    <color name="spot_text">#1B1B22</color>           <!-- main text -->
+    <color name="spot_text_soft">#5F6070</color>      <!-- softer text like the description/coords -->
 </resources>

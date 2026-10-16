@@ -1,3 +1,5 @@
+<!-- the list of options shown in the Category dropdown.
+     kotlin reads this with resources.getStringArray(R.array.categories). -->
 <resources>
     <string-array name="categories">
         <item>Library</item>

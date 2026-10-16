@@ -1,4 +1,4 @@
-package org.setu.studyspotfinder
+package org.setu.studyspotfinder.models
 
 data class StudySpot(
     var id: Long = 0L,

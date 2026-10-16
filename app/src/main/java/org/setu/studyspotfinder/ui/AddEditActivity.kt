@@ -1,8 +1,9 @@
-package org.setu.studyspotfinder
+package org.setu.studyspotfinder.ui
 
 
 import android.widget.ArrayAdapter
 import android.os.Bundle
+import android.text.InputType
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -12,6 +13,9 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
+import org.setu.studyspotfinder.R
+import org.setu.studyspotfinder.data.AppData
+import org.setu.studyspotfinder.models.StudySpot
 
 class AddEditActivity : AppCompatActivity() {
 
@@ -82,14 +86,14 @@ class AddEditActivity : AppCompatActivity() {
 
             xInput = TextInputEditText(this).apply {
                 inputType =
-                    android.text.InputType.TYPE_CLASS_NUMBER or
-                            android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL
+                    InputType.TYPE_CLASS_NUMBER or
+                            InputType.TYPE_NUMBER_FLAG_DECIMAL
             }
 
             yInput = TextInputEditText(this).apply {
                 inputType =
-                    android.text.InputType.TYPE_CLASS_NUMBER or
-                            android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL
+                    InputType.TYPE_CLASS_NUMBER or
+                            InputType.TYPE_NUMBER_FLAG_DECIMAL
             }
         titleLayout = TextInputLayout(this).apply {
             hint = getString(R.string.title_hint)
@@ -114,7 +118,7 @@ class AddEditActivity : AppCompatActivity() {
         val categories = resources.getStringArray(R.array.categories)
 
         categoryInput = MaterialAutoCompleteTextView(this).apply {
-            inputType = android.text.InputType.TYPE_NULL
+            inputType = InputType.TYPE_NULL
             setAdapter(ArrayAdapter(this@AddEditActivity, android.R.layout.simple_list_item_1, categories))
         }
 

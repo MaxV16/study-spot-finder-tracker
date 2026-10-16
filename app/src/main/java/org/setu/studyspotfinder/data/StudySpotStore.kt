@@ -1,8 +1,10 @@
-package org.setu.studyspotfinder
+package org.setu.studyspotfinder.data
 
 import android.content.Context
 import org.json.JSONArray
 import org.json.JSONObject
+import org.setu.studyspotfinder.models.StudySpot
+import java.io.File
 
 // this store replaces the placedmarklist that was memory only, this is json stored so ez persistence.
 // but instead of keeping the marks in memory it saves them to a json file
@@ -10,7 +12,7 @@ import org.json.JSONObject
 class StudySpotStore(context: Context) {
 
     // this is the file we save everything to, its in the apps private storage
-    private val file = java.io.File(context.filesDir, "spots.json")
+    private val file = File(context.filesDir, "spots.json")
 
     // read the file and turn it back into a list of spots
     fun findAll(): List<StudySpot> {

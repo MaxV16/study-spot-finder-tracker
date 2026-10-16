@@ -1,6 +1,7 @@
-package org.setu.studyspotfinder
+package org.setu.studyspotfinder.data
 
 import android.content.Context
+import org.setu.studyspotfinder.StudySpotApp
 
 object AppData {
 
@@ -12,4 +13,3 @@ object AppData {
         studySpots = (context.applicationContext as StudySpotApp).store
     }
 }
-          

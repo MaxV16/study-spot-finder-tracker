@@ -1,4 +1,4 @@
-package org.setu.studyspotfinder
+package org.setu.studyspotfinder.ui
 
 import android.content.Intent
 import android.os.Bundle
@@ -18,6 +18,8 @@ import com.google.android.material.textfield.TextInputLayout
 import android.app.AlertDialog
 import android.view.Menu
 import android.view.MenuItem
+import org.setu.studyspotfinder.R
+import org.setu.studyspotfinder.data.AppData
 
 
 class MainActivity : AppCompatActivity() {

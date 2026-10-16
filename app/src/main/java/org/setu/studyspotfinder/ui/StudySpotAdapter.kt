@@ -1,4 +1,4 @@
-package org.setu.studyspotfinder
+package org.setu.studyspotfinder.ui
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import org.setu.studyspotfinder.R
+import org.setu.studyspotfinder.models.StudySpot
 
 class StudySpotAdapter(
     private var spots: List<StudySpot>,

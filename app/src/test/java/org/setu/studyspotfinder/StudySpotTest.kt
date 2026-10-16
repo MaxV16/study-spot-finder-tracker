@@ -2,6 +2,7 @@ package org.setu.studyspotfinder
 
 import org.junit.Test
 import org.junit.Assert.*
+import org.setu.studyspotfinder.models.StudySpot
 
 class StudySpotTest {
 

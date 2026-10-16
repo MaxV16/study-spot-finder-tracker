@@ -1,11 +1,13 @@
 
 <resources>
 
+    <!-- the app name that shows under the icon -->
     <string name="app_name">Study Spot Finder &amp; Tracker</string>
+    <!-- normal text we use across the app -->
     <string name="main_title">Study Spots</string>
     <string name="add_spot">Add Spot</string>
     <string name="search_hint">Search spots</string>
-    <string name="empty_list">No placed spots yet.</string>
+    <string name="empty_list">No study spots yet.</string>
     <string name="title_hint">Title</string>
     <string name="description_hint">Description</string>
     <string name="x_hint">X coordinate</string>
@@ -17,15 +19,18 @@
     <string name="edit_spot">Edit Spot</string>
     <string name="category_hint">Category</string>
 
+    <!-- validation messages + the little toasts -->
     <string name="err_title_required">Title is required</string>
     <string name="err_valid_number">Enter a valid number</string>
     <string name="spot_not_found">Spot not found</string>
     <string name="spot_created">Spot created</string>
     <string name="spot_updated">Spot updated</string>
 
+    <!-- the are you sure dialog for delete all -->
     <string name="delete_all_title">Delete all spots?</string>
     <string name="delete_all_message">This removes every study spot and cant be undone.</string>
 
+    <!-- the menu titles + the little formats we use to build text from values -->
     <string name="menu_add">Add Spot</string>
     <string name="menu_sort">Sort A-Z</string>
     <string name="menu_delete_all">Delete all</string>

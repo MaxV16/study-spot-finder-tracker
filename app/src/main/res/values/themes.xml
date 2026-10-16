@@ -1,5 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- the real theme, based off material 3 so we get all the material styling for free -->
     <style name="Base.Theme.StudySpotFinder" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- hook our own colours into the material theme -->
         <item name="colorPrimary">@color/spot_primary</item>
         <item name="colorSecondary">@color/spot_secondary</item>
         <item name="colorSurface">@color/spot_surface</item>
@@ -7,5 +9,6 @@
         <item name="android:textColorPrimary">@color/spot_text</item>
     </style>
 
+    <!-- the theme the manifest actually points at, it just inherits the base one above -->
     <style name="Theme.StudySpotFinder" parent="Base.Theme.StudySpotFinder" />
 </resources>

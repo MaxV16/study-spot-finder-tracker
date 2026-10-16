@@ -4,6 +4,7 @@ import org.junit.Test
 import org.junit.Assert.*
 import org.setu.studyspotfinder.models.StudySpot
 
+// unit tests for the StudySpot model, these run on the computer not on a device (fast)
 class StudySpotTest {
 
     //when we make a spot with no arguments it should have sensible defaults
@@ -11,6 +12,7 @@ class StudySpotTest {
     fun defaultStudySpot_hasSensibleDefaults() {
         val spot = StudySpot()
 
+        // everything should be its empty/zero value
         assertEquals(0L, spot.id)
         assertEquals("", spot.title)
         assertEquals("", spot.desc)
@@ -30,7 +32,7 @@ class StudySpotTest {
         assertEquals(44.2, spot.y, 0.0)
     }
 
-    // two spots with the same values should be equal
+    // two spots with the same values should be equal (data class gives us this for free)
     @Test
     fun twoSpotsWithSameValues_areEqual() {
         val a = StudySpot(1L, "Cafe", "good wifi", 1.0, 2.0)

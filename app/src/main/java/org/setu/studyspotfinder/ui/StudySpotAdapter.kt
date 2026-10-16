@@ -9,8 +9,11 @@ import androidx.recyclerview.widget.RecyclerView
 import org.setu.studyspotfinder.R
 import org.setu.studyspotfinder.models.StudySpot
 
+// the adapter takes our list of spots and turns each one into a row on screen
 class StudySpotAdapter(
+    // the list of spots we are showing
     private var spots: List<StudySpot>,
+    // callbacks so the activity handles edit/delete, the adapter doesnt know what to do itself
     private val onEdit: (StudySpot) -> Unit,
     private val onDelete: (StudySpot) -> Unit
 ) : RecyclerView.Adapter<StudySpotAdapter.SpotViewHolder>() {
@@ -26,26 +29,33 @@ class StudySpotAdapter(
         val deleteButton: Button = view.findViewById(R.id.deleteButton)
     }
 
+    // makes a new row view, only called when there isnt a spare one to reuse
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SpotViewHolder {
+        // inflate our item layout into a plain view
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_study_spot, parent, false)
         return SpotViewHolder(view)
     }
 
+    // fills a row with the data for the spot at this position
     override fun onBindViewHolder(holder: SpotViewHolder, position: Int) {
         val spot = spots[position]
         val context = holder.itemView.context
 
+        // title shows the id and the name using a format string like "1: Library"
         holder.title.text = context.getString(R.string.title_format, spot.id, spot.title)
         holder.category.text = spot.category
+        // hide the category line completely if this spot has no category
         holder.category.visibility = if (spot.category.isEmpty()) View.GONE else View.VISIBLE
         holder.desc.text = spot.desc
         holder.coords.text = context.getString(R.string.coords_format, spot.x.toString(), spot.y.toString())
 
+        // hook up the two buttons, tell the activity which spot was tapped
         holder.editButton.setOnClickListener { onEdit(spot) }
         holder.deleteButton.setOnClickListener { onDelete(spot) }
     }
 
+    // how many rows there are
     override fun getItemCount(): Int = spots.size
 
     // swaps le whole list and let the recyclerview animate the change

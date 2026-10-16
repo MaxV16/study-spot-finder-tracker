@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- this is the layout for one row in the list, we used a card so each spot looks like a little card -->
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -9,12 +10,14 @@
     app:cardCornerRadius="@dimen/card_radius"
     app:cardElevation="@dimen/card_elevation">
 
+    <!-- everything inside the card stacks vertically -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="@dimen/card_padding">
 
+        <!-- the title (id + name), the adapter fills this in -->
         <TextView
             android:id="@+id/spotTitle"
             android:layout_width="match_parent"
@@ -23,6 +26,7 @@
             android:textSize="@dimen/title_size"
             android:textStyle="bold" />
 
+        <!-- the category tag, the adapter hides this line when a spot has no category -->
         <TextView
             android:id="@+id/spotCategory"
             android:layout_width="wrap_content"
@@ -33,6 +37,7 @@
             android:textStyle="bold"
             />
 
+        <!-- the description of the spot -->
         <TextView
             android:id="@+id/spotDesc"
             android:layout_width="match_parent"
@@ -40,6 +45,7 @@
             android:textColor="@color/spot_text_soft"
             android:textSize="@dimen/desc_size" />
 
+        <!-- the x and y co ordinates -->
         <TextView
             android:id="@+id/spotCoords"
             android:layout_width="match_parent"
@@ -47,18 +53,21 @@
             android:textColor="@color/spot_text_soft"
             android:textSize="@dimen/coords_size" />
 
+        <!-- a row holding the two buttons side by side -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/gap_small"
             android:orientation="horizontal">
 
+            <!-- edit button, the adapter gives it a click listener -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/editButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/edit" />
 
+            <!-- delete button, nudged to the right so it doesnt touch edit -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/deleteButton"
                 android:layout_width="wrap_content"

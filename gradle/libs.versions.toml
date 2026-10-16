@@ -1,3 +1,4 @@
+# all the versions live in one place here so they are easy to bump
 [versions]
 agp = "9.4.1"
 coreKtx = "1.19.0"
@@ -10,6 +11,7 @@ activityKtx = "1.13.0"
 constraintlayout = "2.1.4"
 recyclerview = "1.4.0"
 
+# the real libraries, each one points at a version above
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -21,6 +23,6 @@ androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", ve
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
 
+# the gradle plugins we apply
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
-

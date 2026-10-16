@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="screen_padding">16dp</dimen>
-    <dimen name="card_margin">8dp</dimen>
-    <dimen name="card_radius">12dp</dimen>
-    <dimen name="card_elevation">4dp</dimen>
-    <dimen name="card_padding">16dp</dimen>
+    <!-- padding + spacing so everything lines up the same, instead of hardcoding numbers everywhere -->
+    <dimen name="screen_padding">16dp</dimen>   <!-- padding around the edge of a whole screen -->
+    <dimen name="card_margin">8dp</dimen>       <!-- gap around each card -->
+    <dimen name="card_radius">12dp</dimen>      <!-- how rounded the card corners are -->
+    <dimen name="card_elevation">4dp</dimen>    <!-- the shadow under each card -->
+    <dimen name="card_padding">16dp</dimen>     <!-- padding inside the card -->
+
+    <!-- the text sizes we reuse -->
     <dimen name="title_size">20sp</dimen>
     <dimen name="desc_size">16sp</dimen>
     <dimen name="coords_size">14sp</dimen>
+
+    <!-- little gaps we reuse -->
     <dimen name="gap_small">8dp</dimen>
     <dimen name="gap_large">40dp</dimen>
 </resources>

@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- the three dot menu in the toolbar, mainactivity inflates this in onCreateOptionsMenu -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <!-- add a new spot -->
     <item
         android:id="@+id/action_add"
         android:title="@string/menu_add"
         app:showAsAction="never" />
 
+    <!-- sort the list a-z, tapping it again toggles it back -->
     <item
         android:id="@+id/action_sort"
         android:title="@string/menu_sort"
         app:showAsAction="never" />
 
+    <!-- delete every spot (it asks first) -->
     <item
         android:id="@+id/action_delete_all"
         android:title="@string/menu_delete_all"

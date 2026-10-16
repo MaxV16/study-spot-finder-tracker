@@ -1,4 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- the night version of the theme, android uses this when the phone is in dark mode -->
     <style name="Base.Theme.StudySpotFinder" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/spot_primary</item>
         <item name="colorSecondary">@color/spot_secondary</item>
@@ -7,5 +8,6 @@
         <item name="android:textColorPrimary">@color/spot_text</item>
     </style>
 
+    <!-- the theme the manifest points at, inherits the base one -->
     <style name="Theme.StudySpotFinder" parent="Base.Theme.StudySpotFinder" />
 </resources>

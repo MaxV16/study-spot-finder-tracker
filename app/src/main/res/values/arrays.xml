@@ -1,4 +1,5 @@
 <resources>
+    <!-- the options that show up in the category dropdown -->
     <string-array name="categories">
         <item>Library</item>
         <item>Cafe</item>

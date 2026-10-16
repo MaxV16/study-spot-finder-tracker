@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- android:name points at our application class so android uses StudySpotApp to set things up -->
     <application
         android:name=".StudySpotApp"
         android:allowBackup="true"
@@ -13,10 +14,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.StudySpotFinder">
 
+        <!-- the add/edit screen, not exported because its only used inside the app -->
         <activity
             android:name=".ui.AddEditActivity"
             android:exported="false" />
 
+        <!-- the main screen, exported and marked as the launcher so its the first thing that opens -->
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"

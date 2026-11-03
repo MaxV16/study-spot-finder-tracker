@@ -9,4 +9,11 @@
     </style>
 
     <style name="Theme.StudySpotFinder" parent="Base.Theme.StudySpotFinder" />
+
+    <!-- only shown while the process cold-starts, then hands over to the normal theme above -->
+    <style name="Theme.StudySpotFinder.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/spot_primary</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="postSplashScreenTheme">@style/Theme.StudySpotFinder</item>
+    </style>
 </resources>

@@ -9,6 +9,7 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
@@ -20,6 +21,7 @@ import android.view.Menu
 import android.view.MenuItem
 import org.setu.studyspotfinder.R
 import org.setu.studyspotfinder.data.AppData
+import timber.log.Timber
 
 
 // MainActivity is the home screen aka the launcher, it shows the list of spots, the search box and the menu.
@@ -35,8 +37,12 @@ class MainActivity : AppCompatActivity() {
 
     // onCreate runs once when the screen is first made, its where we build the ui
     override fun onCreate(savedInstanceState: Bundle?) {
+        // must be before super.onCreate or the splash gets skipped
+        installSplashScreen()
+
         super.onCreate(savedInstanceState)
 
+        Timber.i("MainActivity created")
         createUserInterface()
     }
 

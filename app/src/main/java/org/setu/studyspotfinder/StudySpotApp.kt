@@ -3,6 +3,7 @@ package org.setu.studyspotfinder
 import android.app.Application
 import org.setu.studyspotfinder.data.AppData
 import org.setu.studyspotfinder.data.StudySpotStore
+import timber.log.Timber
 
 // the application class is the very first thing android makes when the app starts, before any screen.
 // the manifest points at it with android:name=".StudySpotApp".
@@ -14,7 +15,15 @@ class StudySpotApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        // only log in debug builds, release stays quiet
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
+
         store = StudySpotStore(this) // made once at launch, not once per screen
         AppData.init(this)    // tells AppData about it so the screens can use it
+
+        Timber.i("StudySpotApp started")
     }
 }

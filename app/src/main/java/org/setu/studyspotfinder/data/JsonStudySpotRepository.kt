@@ -18,4 +18,6 @@ class JsonStudySpotRepository(
     override fun delete(id: Long): Boolean = store.delete(id)
 
     override fun deleteAll() = store.deleteAll()
+
+    override fun restore(spot: StudySpot) = store.restore(spot)
 }

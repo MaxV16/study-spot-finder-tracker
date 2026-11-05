@@ -27,6 +27,8 @@ import org.setu.studyspotfinder.models.StudySpot
 import org.setu.studyspotfinder.ui.main.MainContract
 import org.setu.studyspotfinder.ui.main.MainPresenter
 import timber.log.Timber
+import androidx.recyclerview.widget.ItemTouchHelper
+import com.google.android.material.snackbar.Snackbar
 
 
 // MainActivity is the home screen aka the launcher, it shows the list of spots, the search box and the menu.
@@ -124,16 +126,15 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             visibility = View.GONE
         }
 
-        // the adapter knows how to draw one spot, the recyclerView just scrolls them.
-        // onDelete tells the presenter, the presenter deletes and tells us to redraw.
+        // one listener instead of two button lambdas. tapping the card opens edit for now,
+        // issue 34 changes onSpotClicked to open the detail screen.
         spotAdapter = StudySpotAdapter(
-            emptyList(),
-            onEdit = { spot ->
-                val intent = Intent(this@MainActivity, AddEditActivity::class.java)
-                intent.putExtra("id", spot.id)
-                startActivity(intent)
-            },
-            onDelete = { spot -> presenter.deleteSpot(spot.id) }
+            spots = emptyList(),
+            listener = object : StudySpotListener {
+                override fun onSpotClicked(spot: StudySpot) = openEditor(spot)
+                override fun onEdit(spot: StudySpot) = openEditor(spot)
+                override fun onDelete(spot: StudySpot) = deleteWithUndo(spot)
+            }
         )
 
         // the list itself, the layout manager stacks the rows vertically
@@ -181,6 +182,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
         setContentView(root)
         setSupportActionBar(toolbar)
+        enableSwipeToDelete()
     }
 
 
@@ -219,6 +221,54 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             .setPositiveButton(R.string.delete) { _, _ -> presenter.deleteAll() }
             .setNegativeButton(R.string.cancel, null)
             .show()
+    }
+
+    // opens the form with the spot id so it loads that one
+    private fun openEditor(spot: StudySpot) {
+        startActivity(
+            Intent(this, AddEditActivity::class.java).putExtra("id", spot.id)
+        )
+    }
+
+    // deletes straight away but gives an undo snackbar so a mistake is fixable.
+    // the full spot is kept in the lambda so restore can put the same id back.
+    private fun deleteWithUndo(spot: StudySpot) {
+        presenter.deleteSpot(spot.id)
+        Timber.i("Deleted spot %d", spot.id)
+
+        Snackbar.make(
+            recyclerView,
+            getString(R.string.spot_deleted, spot.title),
+            Snackbar.LENGTH_LONG
+        ).setAction(R.string.undo) {
+            presenter.restoreSpot(spot)
+            Timber.i("Restored spot %d", spot.id)
+        }.show()
+    }
+
+    // swipe left or right deletes the row and shows the undo snackbar
+    private fun enableSwipeToDelete() {
+        val callback = object : ItemTouchHelper.SimpleCallback(
+            0,
+            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+        ) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean = false
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.bindingAdapterPosition
+                if (position == RecyclerView.NO_POSITION) return
+
+                // grab the spot before deleting, the adapter list refreshes underneath us
+                val spot = spotAdapter.spotAt(position) ?: return
+                deleteWithUndo(spot)
+            }
+        }
+
+        ItemTouchHelper(callback).attachToRecyclerView(recyclerView)
     }
 
     // called by the presenter when there are spots to show

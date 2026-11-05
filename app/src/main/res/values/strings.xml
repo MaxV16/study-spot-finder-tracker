@@ -32,4 +32,9 @@
     <string name="menu_delete_all">Delete all</string>
     <string name="title_format">%1$d: %2$s</string>
     <string name="coords_format">X: %1$s, Y: %2$s</string>
+
+    <string name="spot_actions">Spot actions</string>
+    <string name="view_spot">View spot</string>
+    <string name="spot_deleted">%1$s deleted</string>
+    <string name="undo">Undo</string>
 </resources>

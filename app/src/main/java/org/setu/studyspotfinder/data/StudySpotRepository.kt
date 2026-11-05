@@ -11,4 +11,5 @@ interface StudySpotRepository {
     fun update(spot: StudySpot): Boolean
     fun delete(id: Long): Boolean
     fun deleteAll()
+    fun restore(spot: StudySpot)
 }

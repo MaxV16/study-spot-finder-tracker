@@ -1,6 +1,7 @@
 package org.setu.studyspotfinder.ui.main
 
 import org.setu.studyspotfinder.data.StudySpotRepository
+import org.setu.studyspotfinder.models.StudySpot
 
 // owns the query, the sort flag and the list logic now, no android imports at all so its easy to test
 class MainPresenter(
@@ -46,6 +47,11 @@ class MainPresenter(
 
     override fun deleteAll() {
         repository.deleteAll()
+        refresh()
+    }
+
+    override fun restoreSpot(spot: StudySpot) {
+        repository.restore(spot)
         refresh()
     }
 }

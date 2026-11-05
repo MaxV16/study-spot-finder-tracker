@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- the layout for one row in the list (one study spot card). the adapter reuses this same file for every spot,
-     just filling in different values each time. note the @+id names, kotlin finds the views with those. -->
+     just filling in different values each time. note the @+id names, viewbinding finds the views with those. -->
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/card_margin"
+    android:clickable="true"
+    android:focusable="true"
     app:cardBackgroundColor="@color/spot_surface"
     app:cardCornerRadius="@dimen/card_radius"
-    app:cardElevation="@dimen/card_elevation">
+    app:cardElevation="@dimen/card_elevation"
+    app:rippleColor="@color/spot_primary">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,13 +20,30 @@
         android:orientation="vertical"
         android:padding="@dimen/card_padding">
 
-        <TextView
-            android:id="@+id/spotTitle"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/spot_text"
-            android:textSize="@dimen/title_size"
-            android:textStyle="bold" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/spotTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/spot_text"
+                android:textSize="@dimen/title_size"
+                android:textStyle="bold" />
+
+            <!-- overflow button, holds view/edit/delete so the row stays clean -->
+            <ImageButton
+                android:id="@+id/spotMenu"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/spot_actions"
+                android:src="@android:drawable/ic_menu_more" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/spotCategory"
@@ -32,8 +52,7 @@
             android:layout_marginTop="@dimen/gap_small"
             android:textColor="@color/spot_secondary"
             android:textSize="@dimen/coords_size"
-            android:textStyle="bold"
-            />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/spotDesc"
@@ -48,26 +67,5 @@
             android:layout_height="wrap_content"
             android:textColor="@color/spot_text_soft"
             android:textSize="@dimen/coords_size" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/gap_small"
-            android:orientation="horizontal">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/editButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/edit" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/deleteButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/gap_small"
-                android:text="@string/delete" />
-
-        </LinearLayout>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

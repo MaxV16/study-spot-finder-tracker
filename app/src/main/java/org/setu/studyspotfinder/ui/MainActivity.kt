@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,19 +22,23 @@ import android.view.Menu
 import android.view.MenuItem
 import org.setu.studyspotfinder.R
 import org.setu.studyspotfinder.data.AppData
+import org.setu.studyspotfinder.data.JsonStudySpotRepository
+import org.setu.studyspotfinder.models.StudySpot
+import org.setu.studyspotfinder.ui.main.MainContract
+import org.setu.studyspotfinder.ui.main.MainPresenter
 import timber.log.Timber
 
 
 // MainActivity is the home screen aka the launcher, it shows the list of spots, the search box and the menu.
-// everything here is built in kotlin instead of an xml layout, doing the layout by hand was annoying ngl but atleast its all in one file.
-class MainActivity : AppCompatActivity() {
+// it only draws stuff now, the searching/sorting/deleting lives in MainPresenter.
+class MainActivity : AppCompatActivity(), MainContract.View {
 
     // refs to the views we make below, kept up here so all the funcs can reach em
     private lateinit var searchBox: EditText
     private lateinit var recyclerView: RecyclerView
     private lateinit var emptyText: TextView
-    private var sortAZ = false
     private lateinit var spotAdapter: StudySpotAdapter
+    private lateinit var presenter: MainContract.Presenter
 
     // onCreate runs once when the screen is first made, its where we build the ui
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,17 +48,25 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         Timber.i("MainActivity created")
+
+        presenter = MainPresenter(JsonStudySpotRepository(AppData.studySpots))
         createUserInterface()
+        presenter.attach(this)
     }
 
     // onResume runs everytime the screen comes back to the front, like after you save a spot and come back
     override fun onResume() {
         super.onResume()
 
-        // isInitialized stops a crash on the very first pass when the recyclerview isnt built yet
-        if (::recyclerView.isInitialized) {
-            displaySpots()
+        // refresh so a new or edited spot shows up when we come back from the form
+        if (::presenter.isInitialized) {
+            presenter.refresh()
         }
+    }
+
+    override fun onDestroy() {
+        presenter.detach()
+        super.onDestroy()
     }
 
     // build the whole screen top to bottom in here
@@ -84,16 +97,15 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // the search box up top, when you type in it the list filters itself
+        // the search box up top, every keystroke goes to the presenter now
         searchBox = TextInputEditText(this).apply {
             setSingleLine()
 
             addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-                // after every keystroke we redraw, thats what makes it filter as you type
                 override fun afterTextChanged(s: Editable?) {
-                    displaySpots()
+                    presenter.onSearchChanged(s?.toString().orEmpty())
                 }
             })
         }
@@ -113,8 +125,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         // the adapter knows how to draw one spot, the recyclerView just scrolls them.
-        // we hand it 2 lambdas so it doesnt need to know about activities, main decides what the buttons do.
-        // onEdit opens the form with the spot id so it loads that one, onDelete removes it then refreshes the list
+        // onDelete tells the presenter, the presenter deletes and tells us to redraw.
         spotAdapter = StudySpotAdapter(
             emptyList(),
             onEdit = { spot ->
@@ -122,10 +133,7 @@ class MainActivity : AppCompatActivity() {
                 intent.putExtra("id", spot.id)
                 startActivity(intent)
             },
-            onDelete = { spot ->
-                AppData.studySpots.delete(spot.id)
-                displaySpots()
-            }
+            onDelete = { spot -> presenter.deleteSpot(spot.id) }
         )
 
         // the list itself, the layout manager stacks the rows vertically
@@ -173,8 +181,6 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(root)
         setSupportActionBar(toolbar)
-
-        displaySpots()
     }
 
 
@@ -192,10 +198,9 @@ class MainActivity : AppCompatActivity() {
                 startActivity(Intent(this, AddEditActivity::class.java))
                 true
             }
-            // flip the a-z flag and redraw, tapping again flips it back
+            // the presenter flips the a-z flag and redraws
             R.id.action_sort -> {
-                sortAZ = !sortAZ
-                displaySpots()
+                presenter.toggleSort()
                 true
             }
             R.id.action_delete_all -> {
@@ -209,31 +214,29 @@ class MainActivity : AppCompatActivity() {
     // ask first so you cant nuke everything by accident
     private fun deleteAllSpots() {
         AlertDialog.Builder(this)
-            .setTitle("Delete all spots?")
-            .setMessage("This removes every study spot and cant be undone.")
-            .setPositiveButton("Delete") { _, _ ->
-                AppData.studySpots.deleteAll()
-                displaySpots()
-            }
-            .setNegativeButton("Cancel", null)
+            .setTitle(R.string.delete_all_title)
+            .setMessage(R.string.delete_all_message)
+            .setPositiveButton(R.string.delete) { _, _ -> presenter.deleteAll() }
+            .setNegativeButton(R.string.cancel, null)
             .show()
     }
 
-    // reads the spots, filters by the search text, sorts if needed, then hands the list to the adapter
-    private fun displaySpots() {
+    // called by the presenter when there are spots to show
+    override fun showSpots(spots: List<StudySpot>) {
+        emptyText.visibility = View.GONE
+        recyclerView.visibility = View.VISIBLE
+        spotAdapter.updateSpots(spots)
+    }
 
-        val query = searchBox.text.toString()
+    // called by the presenter when the list is empty
+    override fun showEmpty() {
+        spotAdapter.updateSpots(emptyList())
+        emptyText.visibility = View.VISIBLE
+        recyclerView.visibility = View.GONE
+    }
 
-        val marks = AppData.studySpots.findAll()
-            // keep only the spots whose title contains what you typed, ignoring capitals
-            .filter { it.title.contains(query, ignoreCase = true) }
-            // if sortAZ is on sort by title, else leave em as they are
-            .let { if (sortAZ) it.sortedBy { spot -> spot.title.lowercase() } else it }
-
-        // nothing to show means show the msg and hide the list, and the other way round
-        emptyText.visibility = if (marks.isEmpty()) View.VISIBLE else View.GONE
-        recyclerView.visibility = if (marks.isEmpty()) View.GONE else View.VISIBLE
-
-        spotAdapter.updateSpots(marks)
+    // presenter has no context so if it ever needs to say something it hands the string to us
+    override fun showMessage(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

@@ -20,5 +20,6 @@ interface MainContract {
         fun toggleSort()
         fun deleteSpot(id: Long)
         fun deleteAll()
+        fun restoreSpot(spot: StudySpot)
     }
 }

@@ -57,6 +57,16 @@ class StudySpotStore(context: Context) {  // this is the persistence layer of le
         return removed
     }
 
+    // puts a deleted spot back exactly as it was, same id and all.
+// only if its not already there, that would make a duplicate.
+    fun restore(spot: StudySpot) {
+        val list = findAll().toMutableList()
+        if (list.none { it.id == spot.id }) {
+            list.add(spot)
+            save(list)
+        }
+    }
+
     fun deleteAll() { //instead of removing one by one, we just overwrite the file with an empty one #efficient. used in the 3 dots button.
         save(emptyList()) //called by xml
     }

@@ -15,6 +15,7 @@ class MainPresenterTest {
         override fun findAll() = spots.toList()
         override fun findOne(id: Long) = spots.find { it.id == id }
         override fun create(spot: StudySpot) { spots.add(spot) }
+        override fun restore(spot: StudySpot) { spots.add(spot) }
         override fun update(spot: StudySpot): Boolean {
             val i = spots.indexOfFirst { it.id == spot.id }
             if (i == -1) return false

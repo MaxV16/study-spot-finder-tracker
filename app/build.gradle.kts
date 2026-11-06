@@ -47,5 +47,6 @@ dependencies {
     implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.timber)
+    implementation(libs.coil)
 
 }

@@ -1,13 +1,18 @@
 package org.setu.studyspotfinder.ui
 
 
+import android.content.Intent
+import android.net.Uri
 import android.widget.ArrayAdapter
 import android.os.Bundle
 import android.text.InputType
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import coil.load
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
@@ -36,6 +41,29 @@ class AddEditActivity : AppCompatActivity() {
     private lateinit var yLayout: TextInputLayout
     private lateinit var categoryInput: MaterialAutoCompleteTextView
     private lateinit var categoryLayout: TextInputLayout
+
+    // the photo preview and the uri the user picked, null means no photo
+    private lateinit var imagePreview: ImageView
+    private var selectedImageUri: Uri? = null
+
+    // opendocument gives us a uri we can keep after a restart, getcontent does not
+    private val imagePicker =
+        registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+            if (uri != null) {
+                try {
+                    contentResolver.takePersistableUriPermission(
+                        uri,
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    )
+                } catch (_: SecurityException) {
+                    // some gallery apps dont allow persistable access, the photo still shows for now
+                }
+
+                selectedImageUri = uri
+                imagePreview.load(uri)
+            }
+        }
+
     // null means we are adding, if its set we are editing that spot
     private var editingId: Long? = null
 
@@ -146,6 +174,21 @@ class AddEditActivity : AppCompatActivity() {
             addView(categoryInput)
         }
 
+        // the photo preview, starts with the gallery icon so there is always something there
+        imagePreview = ImageView(this).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                (180 * resources.displayMetrics.density).toInt()
+            )
+            scaleType = ImageView.ScaleType.CENTER_CROP
+            setImageResource(android.R.drawable.ic_menu_gallery)
+        }
+
+        val pickButton = MaterialButton(this).apply {
+            text = getString(R.string.choose_photo)
+            setOnClickListener { imagePicker.launch(arrayOf("image/*")) }
+        }
+
         // Save runs saveSpot(), Cancel just closes the screen
         val saveButton = MaterialButton(this).apply {
             text = getString(R.string.save)
@@ -166,6 +209,8 @@ class AddEditActivity : AppCompatActivity() {
         root.addView(xLayout)
         root.addView(yLayout)
         root.addView(categoryLayout)
+        root.addView(imagePreview)
+        root.addView(pickButton)
         root.addView(saveButton)
         root.addView(cancelButton)
 
@@ -196,6 +241,15 @@ class AddEditActivity : AppCompatActivity() {
         yInput.setText(spot.y.toString())
         // the false here means dont run the dropdown filter, we just wanna set the value
         categoryInput.setText(spot.category, false)
+
+        // put the saved photo back in the preview if there is one
+        selectedImageUri = spot.imageUri?.let(Uri::parse)
+
+        if (selectedImageUri != null) {
+            imagePreview.load(selectedImageUri)
+        } else {
+            imagePreview.setImageResource(android.R.drawable.ic_menu_gallery)
+        }
     }
 
     // runs when Save is tapped, validate eveything then either create or update
@@ -211,33 +265,49 @@ class AddEditActivity : AppCompatActivity() {
             return
         }
 
+        titleLayout.error = null
+
         // toDoubleOrNull gives us the number, or null if what was typed isnt a number
         val x = xInput.text.toString().toDoubleOrNull()
 
-        if (x == null) {
-            xLayout.error = getString(R.string.err_valid_number)
+        // lat has to be between -90 and 90, anything else is not on earth
+        if (x == null || x !in -90.0..90.0) {
+            xLayout.error = getString(R.string.err_latitude)
             return
         }
+
+        xLayout.error = null
 
         val y = yInput.text.toString().toDoubleOrNull()
 
-        if (y == null) {
-            yLayout.error = getString(R.string.err_valid_number)
+        // lng goes from -180 to 180
+        if (y == null || y !in -180.0..180.0) {
+            yLayout.error = getString(R.string.err_longitude)
             return
         }
 
-        val category = categoryInput.text.toString()
+        yLayout.error = null
+
+        val spot = StudySpot(
+            id = editingId?.takeIf { it != -1L } ?: 0L,
+            title = title,
+            desc = description,
+            x = x,
+            y = y,
+            category = categoryInput.text.toString(),
+            imageUri = selectedImageUri?.toString()
+        )
+
+        // the model checks the rules again, this catches anything the form missed
+        try {
+            spot.validate()
+        } catch (e: IllegalArgumentException) {
+            Toast.makeText(this, e.message ?: "Check the entered values.", Toast.LENGTH_LONG).show()
+            return
+        }
 
         // no editingId means its a new spot so create it, the store gives it an id
         if (editingId == null || editingId == -1L) {
-
-            val spot = StudySpot(
-                title = title,
-                desc = description,
-                x = x,
-                y = y,
-                category = category
-            )
 
             AppData.studySpots.create(spot)
 
@@ -249,16 +319,7 @@ class AddEditActivity : AppCompatActivity() {
 
         } else {
 
-            // we have an id so its an edit, keep the same id and update the stored spot
-            val spot = StudySpot(
-                id = editingId!!,
-                title = title,
-                desc = description,
-                x = x,
-                y = y,
-                category = category
-            )
-
+            // we have an id so its an edit, the id is already set above
             AppData.studySpots.update(spot)
 
             Toast.makeText(

@@ -37,4 +37,9 @@
     <string name="view_spot">View spot</string>
     <string name="spot_deleted">%1$s deleted</string>
     <string name="undo">Undo</string>
+
+    <string name="choose_photo">Choose photo</string>
+    <string name="spot_photo">Study spot photo</string>
+    <string name="err_latitude">Latitude must be between -90 and 90</string>
+    <string name="err_longitude">Longitude must be between -180 and 180</string>
 </resources>

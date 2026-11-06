@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import org.setu.studyspotfinder.R
 import org.setu.studyspotfinder.databinding.ItemStudySpotBinding
 import org.setu.studyspotfinder.models.StudySpot
@@ -31,6 +32,19 @@ class StudySpotAdapter(
     override fun onBindViewHolder(holder: SpotViewHolder, position: Int) {
         val spot = spots[position]
         val context = holder.itemView.context
+
+        // coil handles both file uris and content uris, setimageresource would choke on a uri string
+        val image = spot.imageUri
+        if (image.isNullOrBlank()) {
+            holder.binding.spotImage.visibility = View.GONE
+        } else {
+            holder.binding.spotImage.visibility = View.VISIBLE
+            holder.binding.spotImage.load(image) {
+                crossfade(true)
+                placeholder(android.R.drawable.ic_menu_gallery)
+                error(android.R.drawable.ic_menu_gallery)
+            }
+        }
 
         holder.binding.spotTitle.text =
             context.getString(R.string.title_format, spot.id, spot.title)

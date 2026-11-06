@@ -26,7 +26,8 @@ class StudySpotStore(context: Context) {  // this is the persistence layer of le
                     desc = obj.getString("desc"),
                     x = obj.getDouble("x"),
                     y = obj.getDouble("y"),
-                    category = obj.optString("category") //using optstring just incase old spots dont have a cat yet, so we dont crash.
+                    category = obj.optString("category"), //using optstring just incase old spots dont have a cat yet, so we dont crash.
+                    imageUri = obj.optString("imageUri").ifBlank { null } // old spots have no image, blank becomes null
                 )
             )
         }
@@ -34,6 +35,7 @@ class StudySpotStore(context: Context) {  // this is the persistence layer of le
     }
 
     fun create(spot: StudySpot) {
+        spot.validate() // no blank names or crazy coordinates get saved
         val list = findAll().toMutableList()  //turns the list into a mutable list so we can add to it
         spot.id = (list.maxOfOrNull { it.id } ?: 0L) + 1 //takes the biggest id we have then adds +1, epic new id for spot, the weird ?: 0l means if the list empty then be 0 instead of crashing
         list.add(spot)
@@ -41,6 +43,7 @@ class StudySpotStore(context: Context) {  // this is the persistence layer of le
     }
 
     fun update(spot: StudySpot): Boolean { //replaces an already saved spot
+        spot.validate()
         val list = findAll().toMutableList() //turns the list into a mutable list so we can add to it
         val index = list.indexOfFirst { it.id == spot.id } //indexoffirst gives us the position in the list, or -1 if there isnt one
         if (index == -1) return false //if theres no spot with that id, return false
@@ -83,6 +86,7 @@ class StudySpotStore(context: Context) {  // this is the persistence layer of le
             obj.put("x", spot.x)
             obj.put("y", spot.y)
             obj.put("category", spot.category)
+            obj.put("imageUri", spot.imageUri ?: JSONObject.NULL)
             arr.put(obj)
         }
         // toString() turns the array into text and writeText throws it onto disk

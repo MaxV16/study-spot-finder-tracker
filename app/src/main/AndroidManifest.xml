@@ -14,6 +14,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.StudySpotFinder">
 
+        <!-- the login/signup screen -->
+        <activity
+            android:name=".ui.auth.AuthActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
         <!-- the add/edit form, exported=false so only our app can open it -->
         <activity
             android:name=".ui.AddEditActivity"

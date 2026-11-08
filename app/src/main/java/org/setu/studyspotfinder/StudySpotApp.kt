@@ -2,6 +2,7 @@ package org.setu.studyspotfinder
 
 import android.app.Application
 import org.setu.studyspotfinder.data.AppData
+import org.setu.studyspotfinder.data.AuthManager
 import org.setu.studyspotfinder.data.StudySpotStore
 import timber.log.Timber
 
@@ -23,6 +24,7 @@ class StudySpotApp : Application() {
 
         store = StudySpotStore(this) // made once at launch, not once per screen
         AppData.init(this)    // tells AppData about it so the screens can use it
+        AuthManager.init(this) // sets up users.json and the session prefs before any screen opens
 
         Timber.i("StudySpotApp started")
     }

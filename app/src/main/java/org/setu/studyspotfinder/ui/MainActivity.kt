@@ -22,8 +22,10 @@ import android.view.Menu
 import android.view.MenuItem
 import org.setu.studyspotfinder.R
 import org.setu.studyspotfinder.data.AppData
+import org.setu.studyspotfinder.data.AuthManager
 import org.setu.studyspotfinder.data.JsonStudySpotRepository
 import org.setu.studyspotfinder.models.StudySpot
+import org.setu.studyspotfinder.ui.auth.AuthActivity
 import org.setu.studyspotfinder.ui.main.MainContract
 import org.setu.studyspotfinder.ui.main.MainPresenter
 import timber.log.Timber
@@ -48,6 +50,13 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         installSplashScreen()
 
         super.onCreate(savedInstanceState)
+
+        // no session means you dont get in, off to the login screen
+        if (AuthManager.currentUser() == null) {
+            startActivity(Intent(this, AuthActivity::class.java))
+            finish()
+            return
+        }
 
         Timber.i("MainActivity created")
 
@@ -207,6 +216,17 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             }
             R.id.action_delete_all -> {
                 deleteAllSpots()
+                true
+            }
+            // temporary logout spot until the drawer happens on day 8
+            R.id.action_logout -> {
+                AuthManager.signOut()
+                startActivity(
+                    Intent(this, AuthActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    }
+                )
+                finish()
                 true
             }
             else -> super.onOptionsItemSelected(item)

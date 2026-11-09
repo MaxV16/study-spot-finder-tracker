@@ -52,11 +52,15 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         super.onCreate(savedInstanceState)
 
         // no session means you dont get in, off to the login screen
-        if (AuthManager.currentUser() == null) {
+        val user = AuthManager.currentUser()
+        if (user == null) {
             startActivity(Intent(this, AuthActivity::class.java))
             finish()
             return
         }
+
+        // pick this users spots file before the presenter reads AppData.studySpots
+        AppData.useUser(user.id)
 
         Timber.i("MainActivity created")
 

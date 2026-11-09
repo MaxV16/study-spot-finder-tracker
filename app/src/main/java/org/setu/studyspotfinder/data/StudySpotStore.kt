@@ -4,13 +4,18 @@ import android.content.Context
 import org.json.JSONArray
 import org.json.JSONObject
 import org.setu.studyspotfinder.models.StudySpot
+import timber.log.Timber
 import java.io.File
 
 // the old version only kept spots in an ArrayList in memory so they vanished when the app closed.
 // now we write them to a json file on the phone so they are still there next time you open the app.
 // the activities never touch the file directly, they only talk to this class, thats the whole point.
-class StudySpotStore(context: Context) {  // this is the persistence layer of le app
-    private val file = File(context.filesDir, "spots.json") //the mega super duper awesome json file we read and write to. filesdir is the apps own private storage. context used to find filesdr
+class StudySpotStore(  // this is the persistence layer of le app
+    context: Context,
+    userId: String = "guest"
+) {
+    // one file per account, the user id is a uuid so its safe as a filename
+    private val file = File(context.filesDir, "spots_$userId.json")
 
     //opens the file, turn the json back into a list of StudySpot objects. gets called everytime we need da list, file is always the source of truth, fileops :D
     fun findAll(): List<StudySpot> {
@@ -91,5 +96,23 @@ class StudySpotStore(context: Context) {  // this is the persistence layer of le
         }
         // toString() turns the array into text and writeText throws it onto disk
         file.writeText(arr.toString())
+    }
+
+    companion object {
+        private const val LEGACY_FILE = "spots.json"
+        private const val MIGRATED_FILE = "spots_migrated.bak"
+
+        // assignment 1 wrote everything to spots.json. copy it into the first account that logs in,
+        // then rename it so the next new account doesnt get the same list again.
+        fun migrateLegacy(context: Context, userId: String) {
+            val legacy = File(context.filesDir, LEGACY_FILE)
+            val target = File(context.filesDir, "spots_$userId.json")
+
+            if (legacy.exists() && !target.exists()) {
+                legacy.copyTo(target, overwrite = false)
+                legacy.renameTo(File(context.filesDir, MIGRATED_FILE))
+                Timber.i("Migrated legacy spots.json to spots_%s.json", userId)
+            }
+        }
     }
 }

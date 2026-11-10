@@ -26,6 +26,7 @@ import org.setu.studyspotfinder.data.AuthManager
 import org.setu.studyspotfinder.data.JsonStudySpotRepository
 import org.setu.studyspotfinder.models.StudySpot
 import org.setu.studyspotfinder.ui.auth.AuthActivity
+import org.setu.studyspotfinder.ui.detail.SpotDetailActivity
 import org.setu.studyspotfinder.ui.main.MainContract
 import org.setu.studyspotfinder.ui.main.MainPresenter
 import timber.log.Timber
@@ -144,7 +145,14 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         spotAdapter = StudySpotAdapter(
             spots = emptyList(),
             listener = object : StudySpotListener {
-                override fun onSpotClicked(spot: StudySpot) = openEditor(spot)
+                // tapping the card shows the detail screen now, edit lives in the overflow and on the detail page
+                override fun onSpotClicked(spot: StudySpot) {
+                    startActivity(
+                        Intent(this@MainActivity, SpotDetailActivity::class.java)
+                            .putExtra("id", spot.id)
+                    )
+                }
+
                 override fun onEdit(spot: StudySpot) = openEditor(spot)
                 override fun onDelete(spot: StudySpot) = deleteWithUndo(spot)
             }

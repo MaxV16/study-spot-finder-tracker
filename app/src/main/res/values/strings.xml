@@ -49,4 +49,10 @@
     <string name="login">Log in</string>
     <string name="create_account">Create account</string>
     <string name="logout">Log out</string>
+
+    <string name="open_in_maps">Open in Maps</string>
+    <string name="share">Share</string>
+    <string name="delete_spot_title">Delete this spot?</string>
+    <string name="delete_spot_message">This removes the spot and its photo link. It cannot be undone.</string>
+    <string name="no_maps_app">No maps app found on this device.</string>
 </resources>

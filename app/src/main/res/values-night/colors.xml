@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- dark mode versions of the same colour names, so every screen flips without touching layouts -->
+<resources>
+    <color name="spot_primary">#3B4570</color>
+    <color name="spot_primary_dark">#232A47</color>
+    <color name="spot_secondary">#5FD3C2</color>
+    <color name="spot_background">#121319</color>
+    <color name="spot_surface">#1D1F27</color>
+    <color name="spot_text">#ECECF2</color>
+    <color name="spot_text_soft">#A7A9B8</color>
+</resources>

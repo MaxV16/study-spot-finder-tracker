@@ -3,9 +3,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
     <application
         android:name=".StudySpotApp"
         android:allowBackup="true"
@@ -17,13 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.StudySpotFinder">
 
-        <!-- the map key comes from local.properties via the gradle placeholder -->
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="${MAPS_API_KEY}" />
-
-
-        <!-- the map screen, one marker per spot -->
+        <!-- placeholder map screen, filled in properly later -->
         <activity
             android:name=".ui.map.MapActivity"
             android:exported="false"

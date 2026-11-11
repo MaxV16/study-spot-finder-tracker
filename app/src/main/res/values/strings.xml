@@ -62,5 +62,4 @@
     <string name="about">About</string>
     <string name="about_message">Study Spot Finder &amp; Tracker\nMaksim Karakulin · 20106742\nVersion 2.0\n\nBuilt for Mobile Application Development 1.</string>
     <string name="settings_placeholder">Settings will appear here.</string>
-    <string name="no_spots_on_map">No spots to show yet.\nAdd one first.</string>
 </resources>

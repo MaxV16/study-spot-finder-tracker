@@ -114,7 +114,6 @@ class SpotDetailActivity : AppCompatActivity() {
         startActivity(
             Intent(this, AddEditActivity::class.java).putExtra("id", spotId)
         )
-        overridePendingTransition(R.anim.slide_in_right, R.anim.fade_out)
     }
 
     private fun shareSpot() {
@@ -157,11 +156,5 @@ class SpotDetailActivity : AppCompatActivity() {
             }
             .setNegativeButton(R.string.cancel, null)
             .show()
-    }
-
-    // however this screen closes (back, delete, missing spot) it fades back out
-    override fun finish() {
-        super.finish()
-        overridePendingTransition(R.anim.fade_in, R.anim.slide_out_right)
     }
 }

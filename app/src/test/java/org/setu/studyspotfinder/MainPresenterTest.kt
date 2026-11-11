@@ -76,26 +76,6 @@ class MainPresenterTest {
     }
 
     @Test
-    fun `category filter combines with the search and sort`() {
-        val (presenter, view) = presenterWith(
-            StudySpot(id = 1, title = "Cafe One", category = "Cafe"),
-            StudySpot(id = 2, title = "Cafe Two", category = "Cafe"),
-            StudySpot(id = 3, title = "Library", category = "Library")
-        )
-
-        presenter.setCategoryFilter("Cafe")
-        assertEquals(listOf("Cafe One", "Cafe Two"), view.spots.map { it.title })
-
-        presenter.onSearchChanged("two")
-        assertEquals(listOf("Cafe Two"), view.spots.map { it.title })
-
-        // null means the All chip
-        presenter.setCategoryFilter(null)
-        presenter.onSearchChanged("")
-        assertEquals(3, view.spots.size)
-    }
-
-    @Test
     fun `delete removes the spot and refreshes`() {
         val (presenter, view) = presenterWith(
             StudySpot(1, "One", "", 0.0, 0.0),

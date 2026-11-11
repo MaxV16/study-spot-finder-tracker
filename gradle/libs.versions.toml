@@ -13,6 +13,7 @@ splashscreen = "1.0.1"
 timber = "5.0.1"
 coil = "2.7.0"
 playServicesMaps = "19.0.0"
+playServicesLocation = "21.3.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -28,6 +29,7 @@ androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscree
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
+play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -14,6 +14,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.StudySpotFinder">
 
+        <!-- placeholder map screen, filled in properly later -->
+        <activity
+            android:name=".ui.map.MapActivity"
+            android:exported="false"
+            android:parentActivityName=".ui.MainActivity" />
+
+        <!-- settings screen -->
+        <activity
+            android:name=".ui.settings.SettingsActivity"
+            android:exported="false"
+            android:parentActivityName=".ui.MainActivity" />
+
         <!-- the read only screen for one spot -->
         <activity
             android:name=".ui.detail.SpotDetailActivity"

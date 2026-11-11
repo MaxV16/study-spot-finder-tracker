@@ -11,10 +11,13 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.navigation.NavigationView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import android.app.AlertDialog
@@ -29,6 +32,8 @@ import org.setu.studyspotfinder.ui.auth.AuthActivity
 import org.setu.studyspotfinder.ui.detail.SpotDetailActivity
 import org.setu.studyspotfinder.ui.main.MainContract
 import org.setu.studyspotfinder.ui.main.MainPresenter
+import org.setu.studyspotfinder.ui.map.MapActivity
+import org.setu.studyspotfinder.ui.settings.SettingsActivity
 import timber.log.Timber
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.snackbar.Snackbar
@@ -44,6 +49,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     private lateinit var emptyText: TextView
     private lateinit var spotAdapter: StudySpotAdapter
     private lateinit var presenter: MainContract.Presenter
+    private lateinit var drawerLayout: DrawerLayout
 
     // onCreate runs once when the screen is first made, its where we build the ui
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -201,9 +207,79 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
         root.addView(emptyText)
 
-        setContentView(root)
+        // the drawer wraps the whole list screen. the root stays exactly the same underneath.
+        drawerLayout = DrawerLayout(this)
+        drawerLayout.addView(
+            root,
+            DrawerLayout.LayoutParams(
+                DrawerLayout.LayoutParams.MATCH_PARENT,
+                DrawerLayout.LayoutParams.MATCH_PARENT
+            )
+        )
+
+        val drawerWidth = (300 * resources.displayMetrics.density).toInt()
+        val navigationView = NavigationView(this).apply {
+            inflateMenu(R.menu.menu_drawer)
+            setNavigationItemSelectedListener { item ->
+                when (item.itemId) {
+                    R.id.nav_spots -> Unit // we are already on it
+                    R.id.nav_map ->
+                        startActivity(Intent(this@MainActivity, MapActivity::class.java))
+                    R.id.nav_settings ->
+                        startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
+                    R.id.nav_about -> showAbout()
+                    R.id.nav_logout -> logout()
+                }
+                drawerLayout.closeDrawers()
+                true
+            }
+        }
+
+        drawerLayout.addView(
+            navigationView,
+            DrawerLayout.LayoutParams(drawerWidth, DrawerLayout.LayoutParams.MATCH_PARENT).apply {
+                gravity = GravityCompat.START
+            }
+        )
+
+        setContentView(drawerLayout)
         setSupportActionBar(toolbar)
+
+        // hamburger opens the drawer, the up arrow is only for the other screens
+        toolbar.setNavigationIcon(R.drawable.ic_menu)
+        toolbar.setNavigationOnClickListener {
+            drawerLayout.openDrawer(GravityCompat.START)
+        }
+
         enableSwipeToDelete()
+    }
+
+    private fun showAbout() {
+        AlertDialog.Builder(this)
+            .setTitle(R.string.about)
+            .setMessage(getString(R.string.about_message))
+            .setPositiveButton(android.R.string.ok, null)
+            .show()
+    }
+
+    private fun logout() {
+        AuthManager.signOut()
+        startActivity(
+            Intent(this, AuthActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+        )
+        finish()
+    }
+
+    // back closes an open drawer first, only then leaves the list
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawers()
+        } else {
+            super.onBackPressed()
+        }
     }
 
 
@@ -228,17 +304,6 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             }
             R.id.action_delete_all -> {
                 deleteAllSpots()
-                true
-            }
-            // temporary logout spot until the drawer happens on day 8
-            R.id.action_logout -> {
-                AuthManager.signOut()
-                startActivity(
-                    Intent(this, AuthActivity::class.java).apply {
-                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    }
-                )
-                finish()
                 true
             }
             else -> super.onOptionsItemSelected(item)

@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -50,6 +52,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     private lateinit var spotAdapter: StudySpotAdapter
     private lateinit var presenter: MainContract.Presenter
     private lateinit var drawerLayout: DrawerLayout
+    private lateinit var categoryChips: ChipGroup
 
     // onCreate runs once when the screen is first made, its where we build the ui
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -116,6 +119,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             setOnClickListener {
                 val intent = Intent(this@MainActivity, AddEditActivity::class.java)
                 startActivity(intent)
+                overridePendingTransition(R.anim.slide_in_right, R.anim.fade_out)
             }
         }
 
@@ -157,6 +161,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
                         Intent(this@MainActivity, SpotDetailActivity::class.java)
                             .putExtra("id", spot.id)
                     )
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.fade_out)
                 }
 
                 override fun onEdit(spot: StudySpot) = openEditor(spot)
@@ -181,6 +186,16 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
         root.addView(
             searchLayout,
+            LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+        )
+
+        // the category filter row, built once here so onResume doesnt stack duplicates
+        categoryChips = createCategoryChips()
+        root.addView(
+            categoryChips,
             LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
@@ -254,6 +269,40 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         enableSwipeToDelete()
     }
 
+    // one chip per category plus an All chip at the start
+    private fun createCategoryChips(): ChipGroup {
+        val group = ChipGroup(this).apply {
+            isSingleSelection = true
+            isSingleLine = false
+            setPadding(0, 8, 0, 8)
+        }
+
+        val categories = resources.getStringArray(R.array.categories)
+        val labels = listOf(getString(R.string.all_categories)) + categories.toList()
+
+        labels.forEachIndexed { index, label ->
+            val chip = Chip(this).apply {
+                text = label
+                isCheckable = true
+                isChecked = index == 0
+                // the All chip has no tag, the presenter treats null as everything
+                tag = if (index == 0) null else label
+                minHeight = (48 * resources.displayMetrics.density).toInt()
+            }
+            group.addView(chip)
+        }
+
+        // listener goes on after the chips exist, otherwise the first check fires a filter
+        group.setOnCheckedStateChangeListener { chipGroup, checkedIds ->
+            if (checkedIds.isEmpty()) return@setOnCheckedStateChangeListener
+
+            val checked = chipGroup.findViewById<Chip>(checkedIds.first())
+            presenter.setCategoryFilter(checked?.tag as? String)
+        }
+
+        return group
+    }
+
     private fun showAbout() {
         AlertDialog.Builder(this)
             .setTitle(R.string.about)
@@ -295,6 +344,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             // same as the Add button, opens a blank form
             R.id.action_add -> {
                 startActivity(Intent(this, AddEditActivity::class.java))
+                overridePendingTransition(R.anim.slide_in_right, R.anim.fade_out)
                 true
             }
             // the presenter flips the a-z flag and redraws
@@ -325,6 +375,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         startActivity(
             Intent(this, AddEditActivity::class.java).putExtra("id", spot.id)
         )
+        overridePendingTransition(R.anim.slide_in_right, R.anim.fade_out)
     }
 
     // deletes straight away but gives an undo snackbar so a mistake is fixable.

@@ -60,5 +60,6 @@ dependencies {
     implementation(libs.timber)
     implementation(libs.coil)
     implementation(libs.play.services.maps)
+    implementation(libs.play.services.location)
 
 }

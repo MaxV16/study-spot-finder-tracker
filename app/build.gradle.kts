@@ -1,6 +1,16 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
 }
+
+// the maps key stays in local.properties (which is gitignored) and gets pasted in
+// through a manifest placeholder so it never ends up in the repo
+val localProperties = Properties().apply {
+    val file = rootProject.file("local.properties")
+    if (file.exists()) file.inputStream().use { load(it) }
+}
+val mapsApiKey = localProperties.getProperty("MAPS_API_KEY") ?: ""
 
 android {
     namespace = "org.setu.studyspotfinder"
@@ -16,6 +26,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
     }
 
     buildTypes {
@@ -48,5 +59,6 @@ dependencies {
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.timber)
     implementation(libs.coil)
+    implementation(libs.play.services.maps)
 
 }

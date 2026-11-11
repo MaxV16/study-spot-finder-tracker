@@ -1,9 +1,7 @@
 package org.setu.studyspotfinder.ui
 
 
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.widget.ArrayAdapter
 import android.os.Bundle
@@ -14,7 +12,6 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import coil.load
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
@@ -23,7 +20,6 @@ import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import org.setu.studyspotfinder.R
 import org.setu.studyspotfinder.data.AppData
-import org.setu.studyspotfinder.data.LocationHelper
 import org.setu.studyspotfinder.models.StudySpot
 
 // this one screen does double duty, it adds a spot and edits one.
@@ -45,19 +41,6 @@ class AddEditActivity : AppCompatActivity() {
     private lateinit var yLayout: TextInputLayout
     private lateinit var categoryInput: MaterialAutoCompleteTextView
     private lateinit var categoryLayout: TextInputLayout
-
-    // fills the lat/lon boxes from the gps
-    private lateinit var useLocationButton: MaterialButton
-
-    // only asks when the user actually taps the button, not when the screen opens
-    private val locationPermission =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-            if (granted) {
-                fillCurrentLocation()
-            } else {
-                Toast.makeText(this, R.string.location_denied, Toast.LENGTH_LONG).show()
-            }
-        }
 
     // the photo preview and the uri the user picked, null means no photo
     private lateinit var imagePreview: ImageView
@@ -92,16 +75,6 @@ class AddEditActivity : AppCompatActivity() {
         // read the id main passed in, nobody passed one so we get -1L back.
         // -1L means no id, so we know we are adding a brand new spot.
         editingId = intent.getLongExtra("id", -1L)
-
-        // when the map long press starts us off we get lat/lng extras.
-        // only use them for a new spot, never for an edit or we'd move the old one.
-        val startLat = intent.getDoubleExtra("lat", Double.NaN)
-        val startLng = intent.getDoubleExtra("lng", Double.NaN)
-
-        if (editingId == -1L && !startLat.isNaN() && !startLng.isNaN()) {
-            xInput.setText(startLat.toString())
-            yInput.setText(startLng.toString())
-        }
 
         // if we do have a real id, fill the form with that spots current values
         if (editingId != -1L) {
@@ -184,23 +157,6 @@ class AddEditActivity : AppCompatActivity() {
             addView(yInput)
         }
 
-        // button sits right under the two coordinate boxes
-        useLocationButton = MaterialButton(this).apply {
-            text = getString(R.string.use_my_location)
-            setOnClickListener {
-                val granted = ContextCompat.checkSelfPermission(
-                    this@AddEditActivity,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ) == PackageManager.PERMISSION_GRANTED
-
-                if (granted) {
-                    fillCurrentLocation()
-                } else {
-                    locationPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-                }
-            }
-        }
-
         // the category dropdown, we pull the options out of res/values/arrays.xml
         val categories = resources.getStringArray(R.array.categories)
 
@@ -252,7 +208,6 @@ class AddEditActivity : AppCompatActivity() {
         root.addView(descriptionLayout)
         root.addView(xLayout)
         root.addView(yLayout)
-        root.addView(useLocationButton)
         root.addView(categoryLayout)
         root.addView(imagePreview)
         root.addView(pickButton)
@@ -260,19 +215,6 @@ class AddEditActivity : AppCompatActivity() {
         root.addView(cancelButton)
 
         setContentView(root)
-    }
-
-    // asks the fused provider for one fix and drops it into x/y
-    private fun fillCurrentLocation() {
-        LocationHelper(this).getCurrentLocation { location ->
-            if (location == null) {
-                Toast.makeText(this, R.string.location_unavailable, Toast.LENGTH_LONG).show()
-                return@getCurrentLocation
-            }
-
-            xInput.setText(location.latitude.toString())
-            yInput.setText(location.longitude.toString())
-        }
     }
 
     // grab the spot from the store and push its values into the fields

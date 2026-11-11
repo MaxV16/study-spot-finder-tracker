@@ -1,15 +1,9 @@
 package org.setu.studyspotfinder.ui.map
 
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -20,7 +14,6 @@ import com.google.android.gms.maps.model.MarkerOptions
 import org.setu.studyspotfinder.R
 import org.setu.studyspotfinder.data.AppData
 import org.setu.studyspotfinder.databinding.ActivityMapBinding
-import org.setu.studyspotfinder.ui.AddEditActivity
 import org.setu.studyspotfinder.ui.detail.SpotDetailActivity
 import timber.log.Timber
 
@@ -29,16 +22,6 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var binding: ActivityMapBinding
     private lateinit var map: GoogleMap
-
-    // only asked for when the user taps the my location button
-    private val locationPermission =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-            if (granted) {
-                enableMyLocation()
-            } else {
-                Toast.makeText(this, R.string.location_denied, Toast.LENGTH_LONG).show()
-            }
-        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,17 +41,6 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         map = googleMap
         map.uiSettings.isZoomControlsEnabled = true
         map.uiSettings.isCompassEnabled = true
-
-        binding.myLocationButton.setOnClickListener { askForLocation() }
-
-        // long press drops a new spot at that point, the form opens already filled in
-        map.setOnMapLongClickListener { latLng ->
-            startActivity(
-                Intent(this, AddEditActivity::class.java)
-                    .putExtra("lat", latLng.latitude)
-                    .putExtra("lng", latLng.longitude)
-            )
-        }
 
         // the marker tag holds the spot id so we know where to go on tap
         map.setOnInfoWindowClickListener { marker ->
@@ -121,45 +93,6 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
             // only happens if the list was empty which we already handled, but just in case
             Timber.w(e, "Could not fit map bounds")
         }
-    }
-
-    private fun askForLocation() {
-        val granted = ContextCompat.checkSelfPermission(
-            this, Manifest.permission.ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
-
-        if (granted) {
-            enableMyLocation()
-        } else {
-            locationPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-        }
-    }
-
-    // shows the blue dot and jumps the camera to where the phone is
-    private fun enableMyLocation() {
-        // check again right before turning it on, the property throws without permission
-        if (ContextCompat.checkSelfPermission(
-                this, Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) return
-
-        try {
-            map.isMyLocationEnabled = true
-        } catch (_: SecurityException) {
-            return
-        }
-
-        LocationServices.getFusedLocationProviderClient(this)
-            .lastLocation
-            .addOnSuccessListener { location ->
-                if (location != null) {
-                    map.animateCamera(
-                        CameraUpdateFactory.newLatLngZoom(
-                            LatLng(location.latitude, location.longitude), 15f
-                        )
-                    )
-                }
-            }
     }
 
     override fun onResume() {

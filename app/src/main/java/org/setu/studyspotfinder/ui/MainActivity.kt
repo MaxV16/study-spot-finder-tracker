@@ -87,7 +87,10 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     }
 
     override fun onDestroy() {
-        presenter.detach()
+        // presenter is only there if we got past the login check, otherwise we crash on the way out
+        if (::presenter.isInitialized) {
+            presenter.detach()
+        }
         super.onDestroy()
     }
 

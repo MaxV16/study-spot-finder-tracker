@@ -55,4 +55,11 @@
     <string name="delete_spot_title">Delete this spot?</string>
     <string name="delete_spot_message">This removes the spot and its photo link. It cannot be undone.</string>
     <string name="no_maps_app">No maps app found on this device.</string>
+
+    <string name="my_spots">My spots</string>
+    <string name="map">Map</string>
+    <string name="settings">Settings</string>
+    <string name="about">About</string>
+    <string name="about_message">Study Spot Finder &amp; Tracker\nMaksim Karakulin · 20106742\nVersion 2.0\n\nBuilt for Mobile Application Development 1.</string>
+    <string name="settings_placeholder">Settings will appear here.</string>
 </resources>

@@ -390,4 +390,10 @@ class AddEditActivity : AppCompatActivity() {
         // close the form, we go back to MainActivity wich refreshes the list in onResume
         finish()
     }
+
+    // same fade on the way out as the detail screen
+    override fun finish() {
+        super.finish()
+        overridePendingTransition(R.anim.fade_in, R.anim.slide_out_right)
+    }
 }

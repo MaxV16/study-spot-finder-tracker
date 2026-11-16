@@ -3,6 +3,7 @@ package org.setu.studyspotfinder
 import android.app.Application
 import org.setu.studyspotfinder.data.AppData
 import org.setu.studyspotfinder.data.AuthManager
+import org.setu.studyspotfinder.data.ThemePrefs
 import timber.log.Timber
 
 // the application class is the very first thing android makes when the app starts, before any screen.
@@ -17,6 +18,9 @@ class StudySpotApp : Application() {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
+
+        // put the saved light/dark choice back before any screen is built
+        ThemePrefs.apply(this)
 
         AuthManager.init(this)
         AppData.init(this) // just saves the context, the spot store comes later in useUser

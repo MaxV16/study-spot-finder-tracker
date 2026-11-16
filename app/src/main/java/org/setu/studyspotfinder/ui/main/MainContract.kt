@@ -18,6 +18,7 @@ interface MainContract {
         fun refresh()
         fun onSearchChanged(query: String)
         fun toggleSort()
+        fun setCategoryFilter(category: String?)
         fun deleteSpot(id: Long)
         fun deleteAll()
         fun restoreSpot(spot: StudySpot)

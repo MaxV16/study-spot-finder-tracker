@@ -10,6 +10,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.OnBackPressedCallback
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -270,6 +271,22 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         }
 
         enableSwipeToDelete()
+        enableDrawerBackHandling()
+    }
+
+    // Android 16+ delivers back gestures to the dispatcher, not to onBackPressed.
+    // The drawer gets first refusal: close it if open, otherwise do the normal back.
+    private fun enableDrawerBackHandling() {
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    drawerLayout.closeDrawers()
+                } else {
+                    isEnabled = false
+                    onBackPressedDispatcher.onBackPressed()
+                }
+            }
+        })
     }
 
     // one chip per category plus an All chip at the start
@@ -323,17 +340,6 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         )
         finish()
     }
-
-    // back closes an open drawer first, only then leaves the list
-    @Deprecated("Deprecated in Java")
-    override fun onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawers()
-        } else {
-            super.onBackPressed()
-        }
-    }
-
 
     // build the little three dot menu in the toolbar
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

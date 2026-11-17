@@ -96,6 +96,60 @@ class MainPresenterTest {
     }
 
     @Test
+    fun `category filter combines with search`() {
+        val (presenter, view) = presenterWith(
+            StudySpot(1, "Central Library", "", 0.0, 0.0, "Library"),
+            StudySpot(2, "Cafe Nero", "", 0.0, 0.0, "Cafe"),
+            StudySpot(3, "Library Cafe", "", 0.0, 0.0, "Cafe")
+        )
+
+        presenter.setCategoryFilter("Cafe")
+        presenter.onSearchChanged("library")
+
+        assertEquals(listOf("Library Cafe"), view.spots.map { it.title })
+    }
+
+    @Test
+    fun `clearing the category restores the full list`() {
+        val (presenter, view) = presenterWith(
+            StudySpot(1, "Library", "", 0.0, 0.0, "Library"),
+            StudySpot(2, "Cafe", "", 0.0, 0.0, "Cafe")
+        )
+
+        presenter.setCategoryFilter("Library")
+        assertEquals(1, view.spots.size)
+
+        presenter.setCategoryFilter(null)
+        assertEquals(2, view.spots.size)
+    }
+
+    @Test
+    fun `category search and sort all apply together`() {
+        val (presenter, view) = presenterWith(
+            StudySpot(1, "Zeta Cafe", "", 0.0, 0.0, "Cafe"),
+            StudySpot(2, "Alpha Cafe", "", 0.0, 0.0, "Cafe"),
+            StudySpot(3, "Alpha Library", "", 0.0, 0.0, "Library")
+        )
+
+        presenter.setCategoryFilter("Cafe")
+        presenter.onSearchChanged("alpha")
+        presenter.toggleSort()
+
+        assertEquals(listOf("Alpha Cafe"), view.spots.map { it.title })
+    }
+
+    @Test
+    fun `filtering everything out shows the empty state`() {
+        val (presenter, view) = presenterWith(
+            StudySpot(1, "Library", "", 0.0, 0.0, "Library")
+        )
+
+        presenter.onSearchChanged("no such spot")
+
+        assertTrue(view.empty)
+    }
+
+    @Test
     fun `delete removes the spot and refreshes`() {
         val (presenter, view) = presenterWith(
             StudySpot(1, "One", "", 0.0, 0.0),

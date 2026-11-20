@@ -3,9 +3,16 @@
     <style name="Base.Theme.StudySpotFinder" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/spot_primary</item>
         <item name="colorSecondary">@color/spot_secondary</item>
+        <!-- same reason as the light theme: keep button text white on the indigo -->
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnSecondary">@color/white</item>
         <item name="colorSurface">@color/spot_surface</item>
         <item name="android:colorBackground">@color/spot_background</item>
         <item name="android:textColorPrimary">@color/spot_text</item>
+        <!-- dark background, so the status bar icons stay light here -->
+        <item name="android:windowLightStatusBar">false</item>
+        <!-- same API 27 note as the light theme -->
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">false</item>
     </style>
 
     <style name="Theme.StudySpotFinder" parent="Base.Theme.StudySpotFinder" />

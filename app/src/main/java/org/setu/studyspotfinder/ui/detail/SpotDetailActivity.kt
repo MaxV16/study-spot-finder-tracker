@@ -71,8 +71,10 @@ class SpotDetailActivity : AppCompatActivity() {
         )
 
         if (spot.imageUri.isNullOrBlank()) {
-            binding.spotImage.setImageResource(android.R.drawable.ic_menu_gallery)
+            // no photo on this spot, so hide the frame. a giant placeholder icon looked broken.
+            binding.spotImage.visibility = View.GONE
         } else {
+            binding.spotImage.visibility = View.VISIBLE
             binding.spotImage.load(spot.imageUri) {
                 crossfade(true)
                 placeholder(android.R.drawable.ic_menu_gallery)

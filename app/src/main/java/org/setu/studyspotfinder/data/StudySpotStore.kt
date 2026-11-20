@@ -32,7 +32,10 @@ class StudySpotStore(  // this is the persistence layer of le app
                     x = obj.getDouble("x"),
                     y = obj.getDouble("y"),
                     category = obj.optString("category"), //using optstring just incase old spots dont have a cat yet, so we dont crash.
-                    imageUri = obj.optString("imageUri").ifBlank { null } // old spots have no image, blank becomes null
+                    // optString turns a json null into the text "null", and older versions saved that
+                    // text back into the file, so both have to count as "no photo"
+                    imageUri = if (obj.isNull("imageUri")) null
+                    else obj.optString("imageUri").ifBlank { null }?.takeIf { it != "null" }
                 )
             )
         }

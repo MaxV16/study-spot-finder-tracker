@@ -3,9 +3,18 @@
     <style name="Base.Theme.StudySpotFinder" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/spot_primary</item>
         <item name="colorSecondary">@color/spot_secondary</item>
+        <!-- without this the filled buttons take Material3's default dark-on-primary
+             text, which is unreadable on our indigo in night mode -->
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnSecondary">@color/white</item>
         <item name="colorSurface">@color/spot_surface</item>
         <item name="android:colorBackground">@color/spot_background</item>
         <item name="android:textColorPrimary">@color/spot_text</item>
+        <!-- with edge-to-edge on Android 15+ the status bar sits over our light background,
+             so its icons have to be dark or they vanish -->
+        <item name="android:windowLightStatusBar">true</item>
+        <!-- navigation bar icon tint only exists from API 27, older phones just ignore it -->
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
     </style>
 
     <style name="Theme.StudySpotFinder" parent="Base.Theme.StudySpotFinder" />

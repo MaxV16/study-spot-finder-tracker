@@ -150,17 +150,20 @@ class AddEditActivity : AppCompatActivity() {
         titleInput = TextInputEditText(this)
         descriptionInput = TextInputEditText(this)
 
-        // x and y only take numbers with decimals so the keyboard and validation match up
+        // x and y take signed decimals so a minus can be typed. without the signed flag
+        // you cant enter a longitude like -6.26 for dublin by hand, only through the location button
         xInput = TextInputEditText(this).apply {
             inputType =
                 InputType.TYPE_CLASS_NUMBER or
-                        InputType.TYPE_NUMBER_FLAG_DECIMAL
+                        InputType.TYPE_NUMBER_FLAG_DECIMAL or
+                        InputType.TYPE_NUMBER_FLAG_SIGNED
         }
 
         yInput = TextInputEditText(this).apply {
             inputType =
                 InputType.TYPE_CLASS_NUMBER or
-                        InputType.TYPE_NUMBER_FLAG_DECIMAL
+                        InputType.TYPE_NUMBER_FLAG_DECIMAL or
+                        InputType.TYPE_NUMBER_FLAG_SIGNED
         }
 
         // each input gets wrapped in a TextInputLayout, thats what gives it the floating hint
@@ -207,6 +210,11 @@ class AddEditActivity : AppCompatActivity() {
         categoryInput = MaterialAutoCompleteTextView(this).apply {
             // TYPE_NULL stops the normal keyboard popping up, we want the dropdown instead
             inputType = InputType.TYPE_NULL
+            // 0 means the full list shows even while the box is still empty
+            threshold = 0
+            // with TYPE_NULL the field never opens the list on its own, so tapping it has to.
+            // without this the category could not be picked at all
+            setOnClickListener { showDropDown() }
             // the adapter feeds the options to the dropdown
             setAdapter(ArrayAdapter(this@AddEditActivity, android.R.layout.simple_list_item_1, categories))
         }
